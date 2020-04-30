@@ -25,9 +25,12 @@
 (require 'bind-key)
 (use-package diminish :ensure t)
 
-
 (setq-default major-mode 'text-mode)
 (setq-default indent-tabs-mode nil)
+
+(setq browse-url-eneric-program
+      (executable-find (getenv "BROWSER"))
+      browse-url-browser-function 'browse-url-generic)
 
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
