@@ -101,7 +101,8 @@
                ("programing" (or
                                (mode . python-mode)
                                (mode . c++-mode)
-                               (mode . shellscript-mode)))
+                               (mode . shellscript-mode)
+                               (mode . fish-mode)))
                ("emacs" (or
                          (filename . "/\.emacs\.d/")
                          (name . "^\\*.*\\*$"))) ))))
@@ -185,6 +186,7 @@
 (epa-file-enable)
 
 (use-package raku-mode :ensure t :defer t)
+(use-package fish-mode :ensure t :defer t)
 
 (use-package flycheck
   :ensure t
