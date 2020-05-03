@@ -151,10 +151,10 @@
             (global-set-key (kbd "C-c C-p") 'tabbar-backward-group)
             (global-set-key (kbd "C-c C-n") 'tabbar-forward-group)))
 
-;; resize-mini-buffer.el
-;;; code below relies on resize-mini-windows value
-(setq resize-mini-windows nil)
+;; make mini buffer taller
+(setq resize-mini-windows nil) ; set nil to keep size after resing buffer
 (defun resize-minibuffer-window (greeting-message)
+  (interactive)
   (let* ((minibuffer-orig-height (window-size (minibuffer-window)))
          (minibuffer-new-height 6)
          (delta (- minibuffer-new-height minibuffer-orig-height))
@@ -168,21 +168,10 @@
 (add-hook 'after-change-major-mode-hook (lambda ()
                                           (resize-minibuffer-window nil)))
 
-;;; code below relies on resize-mini-windows value
-(defun resize-minibuffer-window (greeting-message)
-  (let* ((minibuffer-orig-height (window-size (minibuffer-window)))
-         (minibuffer-new-height 6)
-         (delta (- minibuffer-new-height minibuffer-orig-height))
-         )
-
-    (window-resize (minibuffer-window) delta)
-    (when greeting-message (message "Have a nice one."))))
-
-(add-hook 'window-setup-hook (lambda ()
-                               (resize-minibuffer-window t)))
-(add-hook 'after-change-major-mode-hook (lambda ()
-                                          (resize-minibuffer-window nil)))
-
+(global-set-key (kbd "C-l") (lambda()
+                              (interactive) ; without this emacs will complain
+                              (redraw-display)
+                              (resize-minibuffer-window nil)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -279,8 +268,9 @@
 
 ;;; automatically save last edit place
 (require 'saveplace)
-(setq save-place-file "~/.config/emacs.d/saveplace")
-(save-place-mode)
+(setq save-place-file "~/.config/emacs/places")
+(setq save-place-forget-unreadable-files nil)
+(save-place-mode 1)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
