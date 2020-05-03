@@ -24,16 +24,30 @@
 ;;; Global configuration
 (require 'bind-key)
 (use-package diminish :ensure t)
-
 (setq vc-follow-symlinks t)
 (setq-default major-mode 'text-mode)
 (setq-default indent-tabs-mode nil)
+(add-hook 'prog-mode-hook 'hs-minor-mode)
 
-;(setq browse-url-generic-program
+(require 'display-line-numbers)
+(defcustom display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode)
+  "Major modes on which to disable the linum mode, exempts them from global requirement"
+  :group 'display-line-numbers
+  :type 'list
+  :version "green")
+
+(defun display-line-numbers--turn-on ()
+  "turn on line numbers but excempting certain majore modes defined in `display-line-numbers-exempt-modes'"
+  (if (and
+       (not (member major-mode display-line-numbers-exempt-modes))
+       (not (minibufferp)))
+      (display-line-numbers-mode)))
+
+(global-display-line-numbers-mode)
+
+;(Setq browse-url-generic-program
 ;      (executable-find (getenv "BROWSER"))
 ;      browse-url-browser-function 'browse-url-generic)
-
-(add-hook 'prog-mode-hook 'hs-minor-mode)
 
 ;;; Startup
 (setq inhibit-startup-message t)
@@ -262,6 +276,11 @@
 (require 'whitespace)
 (setq whitespace-style '(face empty tabs lines-tail trailing))
 (global-whitespace-mode t)
+
+;;; automatically save last edit place
+(require 'saveplace)
+(setq save-place-file "~/.config/emacs.d/saveplace")
+(save-place-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
