@@ -42,7 +42,7 @@ if test -d $myPerl6
    end
 end
 
-if test -d $HOME.wine
+if test -d $HOME/.wine
     set -x WINEPREFIX $HOME/.wine
     set -x WINEARCH win64
 end
