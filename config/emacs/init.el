@@ -28,15 +28,15 @@
 (setq-default major-mode 'text-mode)
 (setq-default indent-tabs-mode nil)
 
-(setq browse-url-eneric-program
-      (executable-find (getenv "BROWSER"))
-      browse-url-browser-function 'browse-url-generic)
+;(setq browse-url-generic-program
+;      (executable-find (getenv "BROWSER"))
+;      browse-url-browser-function 'browse-url-generic)
 
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
 ;;; Startup
 (setq inhibit-startup-message t)
-(if (display-graphic-p)
+(if (display-graphic-p) ;; or (window-system)
     ; THEN
     (progn
       (set-scroll-bar-mode 'left)
@@ -71,10 +71,10 @@
   ;;; Apply Some theme if on terminal
   (use-package gruvbox-theme
   :ensure t
-  :config (load-theme 'gruvbox t))
-  )
+  :config (load-theme 'gruvbox t))))
 
 ;;; open bookmark when emacs is running withougt visiting a file.
+;;  note: it is not working when emacs is running as daemon
 (defun make-initial-buffer-as-bookmark-if-no-file-visited ()
   (let ((no-file-visited t)
         (args command-line-args))
@@ -83,10 +83,11 @@
         (if (file-exists-p arg)
             (setq no-file-visited nil))))
     (when no-file-visited
-      (bookmark-bmenu-list) ;; make book mark buffer first
+      (bookmark-bmenu-list) ;; create a book mark buffer first
       (setq initial-buffer-choice (lambda ()(get-buffer "*Bookmark List*"))))))
 
-(add-hook 'after-init-hook (lambda () (make-initial-buffer-as-bookmark-if-no-file-visited)))
+(add-hook 'after-init-hook
+          (lambda () (make-initial-buffer-as-bookmark-if-no-file-visited)))
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 ;; note: if you're using screen and your escape key is "C-[Bb]",
@@ -269,7 +270,7 @@
  '(nil nil t)
  '(package-selected-packages
    (quote
-    (raku-mode fold-dwim-org fold-dwim gruvbox-theme auctex fish-mode counsel ivy auto-complete magit use-package nov flycheck-perl6 cl-lib-highlight cl-generic cl-format airline-themes)))
+    (w3m raku-mode fold-dwim-org fold-dwim gruvbox-theme auctex fish-mode counsel ivy auto-complete magit use-package nov flycheck-perl6 cl-lib-highlight cl-generic cl-format airline-themes)))
  '(paren-mode (quote sexp) nil (paren))
  '(query-user-mail-address nil)
  '(safe-local-variable-values

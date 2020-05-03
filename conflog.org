@@ -1,0 +1,4 @@
+* Emacs
+** External settings
+   [[https://www.emacswiki.org/emacs/EmacsAsDaemon][Emacs as daemon]]
+   I used systemd method.
