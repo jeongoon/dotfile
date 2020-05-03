@@ -25,6 +25,7 @@
 (require 'bind-key)
 (use-package diminish :ensure t)
 
+(setq vc-follow-symlinks t)
 (setq-default major-mode 'text-mode)
 (setq-default indent-tabs-mode nil)
 
@@ -42,13 +43,11 @@
       (set-scroll-bar-mode 'left)
       (set-face-attribute 'default nil :font "Fira Code Retina" :height 100)
 
-      (progn
-        (require 'uim-leim) ;; this is not on melpha
-        ;; set default IM
-        (setq default-input-method "korean-byeoru-uim")
-        (add-hook 'after-change-major-mode-hook
-                  (lambda () (set-input-method "korean-byeoru-uim")))
-        )
+      (require 'uim-leim) ;; this is not on melpha
+      ;; set default IM
+      (setq default-input-method "korean-byeoru-uim")
+      (add-hook 'after-change-major-mode-hook
+                (lambda () (set-input-method "korean-byeoru-uim")))
 
       ;; use specific font for Korean charset.
       ;; if you want to use different font size for specific charset,
@@ -71,7 +70,7 @@
   ;;; Apply Some theme if on terminal
   (use-package gruvbox-theme
   :ensure t
-  :config (load-theme 'gruvbox t))))
+  :config (load-theme 'gruvbox t)))
 
 ;;; open bookmark when emacs is running withougt visiting a file.
 ;;  note: it is not working when emacs is running as daemon
@@ -89,7 +88,8 @@
 (add-hook 'after-init-hook
           (lambda () (make-initial-buffer-as-bookmark-if-no-file-visited)))
 
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+;;; iBuffer
+;(global-set-key (kbd "C-x C-b") 'ibuffer)
 ;; note: if you're using screen and your escape key is "C-[Bb]",
 ;; you need to type "C-x C-b b"
 (setq ibuffer-saved-filter-groups
@@ -105,10 +105,9 @@
                                (mode . shellscript-mode)
                                (mode . fish-mode)))
                ("emacs" (or
-                         (filename . "/\.emacs\.d/")
+                         (filename . "/\\bemacs\\b*/")
                          (name . "^\\*.*\\*$"))) ))))
 
-;;; iBuffer
 (add-hook 'ibuffer-mode-hook
           (lambda ()
             (ibuffer-auto-mode 1)
@@ -122,6 +121,21 @@
 
 ;; Dont ask for firmation to delete marked buffers
 (setq ibuffer-expert t)
+
+(setq indo-enable-flex-match t)
+(setq ido-everywhere t)
+(ido-mode 1)
+
+(defalias 'list-buffers 'ibuffer)
+
+(use-package tabbar
+  :ensure t
+  :config (progn
+            (tabbar-mode 1)
+            (global-set-key (kbd "C-c C-j") 'tabbar-backward)
+            (global-set-key (kbd "C-c C-k") 'tabbar-forward)
+            (global-set-key (kbd "C-c C-p") 'tabbar-backward-group)
+            (global-set-key (kbd "C-c C-n") 'tabbar-forward-group)))
 
 ;; resize-mini-buffer.el
 ;;; code below relies on resize-mini-windows value
@@ -249,8 +263,6 @@
 (setq whitespace-style '(face empty tabs lines-tail trailing))
 (global-whitespace-mode t)
 
-
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -270,7 +282,7 @@
  '(nil nil t)
  '(package-selected-packages
    (quote
-    (w3m raku-mode fold-dwim-org fold-dwim gruvbox-theme auctex fish-mode counsel ivy auto-complete magit use-package nov flycheck-perl6 cl-lib-highlight cl-generic cl-format airline-themes)))
+    (tabbar w3m raku-mode fold-dwim-org fold-dwim gruvbox-theme auctex fish-mode counsel ivy auto-complete magit use-package nov flycheck-perl6 cl-lib-highlight cl-generic cl-format airline-themes)))
  '(paren-mode (quote sexp) nil (paren))
  '(query-user-mail-address nil)
  '(safe-local-variable-values
@@ -289,7 +301,6 @@
 (global-set-key (kbd "C-]")     'fold-dwim-toggle)
 (global-set-key (kbd "C-x [")    'fold-dwim-hide-all)
 (global-set-key (kbd "C-x ]")    'fold-dwim-show-all)
-
 
 ;;(hideshowvis-symbols)
 
