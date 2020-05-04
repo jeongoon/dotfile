@@ -26,30 +26,56 @@
 (use-package diminish :ensure t)
 (setq vc-follow-symlinks t)
 (setq-default major-mode 'text-mode)
-(setq-default indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil) ; I prefer not to use indent-tabs-mode
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
 (require 'display-line-numbers)
+(defcustom display-line-numbers-allowed-modes '(prog-mode emacs-lisp-mode text-mode)
+  "Major modes on which to enable the linum mode which includes major-mode like prog-mode"
+  :group 'display-line-numbers
+  :type 'list
+  :version "green")
+
 (defcustom display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode)
   "Major modes on which to disable the linum mode, exempts them from global requirement"
   :group 'display-line-numbers
   :type 'list
   :version "green")
 
+(defcustom display-line-numbers-allowed-modes-include-derived-mode 't
+  "Enable display-line-numbers on derived mode of given `display-line-numbers-allowed-modes'"
+  :type 'boolean
+    :group 'display-line-numbers)
+
+(defcustom display-line-numbers-allowed-on-starred-buffers 't
+  "Disable buffers that have stars in them like *Gnu Emacs*"
+  :type 'boolean
+    :group 'display-line-numbers)
+
 (defun display-line-numbers--turn-on ()
-  "turn on line numbers but excempting certain majore modes defined in `display-line-numbers-exempt-modes'"
-  (if (and
-       (not (member major-mode display-line-numbers-exempt-modes))
-       (not (minibufferp)))
+  "turn on line numbers in `display-line-numbers-allowed-modes' but excempting certain major modes defined in `display-line-numbers-exempt-modes'"
+  (if (and (not (minibufferp))
+           (or display-line-numbers-allowed-on-starred-buffers
+               (not string-match "*" (buffer-name)))
+           (or
+            (member major-mode display-line-numbers-allowed-modes)
+            (when display-line-numbers-allowed-modes-include-derived-mode
+              (let (derived-mode?)
+                (dolist (el display-line-numbers-allowed-modes derived-mode?)
+                ;note: last arg derived-mode? will return when dolist finished.
+                  (when (derived-mode-p el)
+                    (setq derived-mode? t))))))
+           (not (member major-mode display-line-numbers-exempt-modes)))
+
       (display-line-numbers-mode)))
 
-(global-display-line-numbers-mode)
+(global-display-line-numbers-mode 1)
 
 ;(Setq browse-url-generic-program
 ;      (executable-find (getenv "BROWSER"))
 ;      browse-url-browser-function 'browse-url-generic)
 
-;;; Startup
+;;; Frame and Buffer Setup (size, theme)
 (setq inhibit-startup-message t)
 (if (display-graphic-p) ;; or (window-system)
     ; THEN
@@ -151,27 +177,27 @@
             (global-set-key (kbd "C-c C-p") 'tabbar-backward-group)
             (global-set-key (kbd "C-c C-n") 'tabbar-forward-group)))
 
-;; make mini buffer taller
-(setq resize-mini-windows nil) ; set nil to keep size after resing buffer
-(defun resize-minibuffer-window (greeting-message)
-  (interactive)
+;; not so minibuffer: make it a bit taller
+(setq resize-mini-windows nil) ; set nil to keep size after resizing minibuffer
+(defun resize-minibuffer-window (&optional greeting-message)
+  (interactive) ; needed because we will use inside global-set-key as well
   (let* ((minibuffer-orig-height (window-size (minibuffer-window)))
          (minibuffer-new-height 6)
          (delta (- minibuffer-new-height minibuffer-orig-height))
          )
 
     (window-resize (minibuffer-window) delta)
-    (when greeting-message (message "Have a nice one."))))
+    (when greeting-message (message "Have a nice one. ;^]"))))
 
 (add-hook 'window-setup-hook (lambda ()
                                (resize-minibuffer-window t)))
 (add-hook 'after-change-major-mode-hook (lambda ()
-                                          (resize-minibuffer-window nil)))
+                                          (resize-minibuffer-window)))
 
 (global-set-key (kbd "C-l") (lambda()
                               (interactive) ; without this emacs will complain
                               (redraw-display)
-                              (resize-minibuffer-window nil)))
+                              (resize-minibuffer-window)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

@@ -2,3 +2,7 @@
 ** External settings
    [[https://www.emacswiki.org/emacs/EmacsAsDaemon][Emacs as daemon]]
    I used systemd method.
+
+** Emacs lisp study
+*** Difference between eq, eql, equal and equalp
+   [[https://stackoverflow.com/questions/547436/whats-the-difference-between-eq-eql-equal-and-equalp-in-common-lisp][{stackoverflow: 547436}]]
