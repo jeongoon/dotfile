@@ -1,8 +1,17 @@
+#+TAGS: init_el emacslisp
 * Emacs
 ** External settings
    [[https://www.emacswiki.org/emacs/EmacsAsDaemon][Emacs as daemon]]
    I used systemd method.
 
+
 ** Emacs lisp study
 *** Difference between eq, eql, equal and equalp
    [[https://stackoverflow.com/questions/547436/whats-the-difference-between-eq-eql-equal-and-equalp-in-common-lisp][{stackoverflow: 547436}]]
+
+** DONE make my own mode for programme mode which includes
+*** DONE common-allow-deny-rule
+**** TODO make it version 0.1
+*** DONE whitespace
+*** DONE display line numbers mode
+

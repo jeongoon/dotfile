@@ -4,7 +4,7 @@
 ;;; this is heavily copied from other emacs users's configuration
 ;;; my own code is indicated by "By Myoungjin Jeon"
 ;;; and feel free to use.
-
+;;; Code:
 (provide 'init)
 
 (require 'package)
@@ -30,50 +30,69 @@
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
 (require 'display-line-numbers)
-(defcustom display-line-numbers-allowed-modes '(prog-mode emacs-lisp-mode text-mode)
-  "Major modes on which to enable the linum mode which includes major-mode like prog-mode"
-  :group 'display-line-numbers
-  :type 'list
-  :version "green")
+(setq display-line-numbers-type 'visual) ; setting display-line-numbers isn't working
+(setq display-line-numbers-current-absoulte t)
 
-(defcustom display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode)
-  "Major modes on which to disable the linum mode, exempts them from global requirement"
-  :group 'display-line-numbers
-  :type 'list
-  :version "green")
+(require 'whitespace)
+(setq whitespace-style '(face empty tabs lines-tail trailing))
 
-(defcustom display-line-numbers-allowed-modes-include-derived-mode 't
-  "Enable display-line-numbers on derived mode of given `display-line-numbers-allowed-modes'"
-  :type 'boolean
-    :group 'display-line-numbers)
-
-(defcustom display-line-numbers-allowed-on-starred-buffers 't
+(defcustom display-line-numbers-allowed-on-starred-buffers 'nil
   "Disable buffers that have stars in them like *Gnu Emacs*"
   :type 'boolean
-    :group 'display-line-numbers)
+  :group 'display-line-numbers)
+
+(add-to-list 'load-path (concat user-emacs-directory
+                                (convert-standard-filename "my-lisp/")))
+(require 'common-allow-deny-rule)
+
+(defcustom work-mode-allowed-modes '(prog-mode emacs-lisp-mode text-mode)
+  "Major modes on which to enable the display-line-numbers mode and whitespace mode and so on"
+  :group 'work-mode
+  :type 'list
+  :version "green")
+
+(defcustom work-mode-exempt-modes
+  '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode)
+  "Major modes on which to disable the work-mode"
+  :group 'work-mode
+  :type 'list
+  :version "green")
+
+(defcustom work-mode-allowed-modes-include-derived-mode 't
+  "Extends enabling work-mode through all the derived mode from work-mode-allowed mode"
+  :group 'work-mode
+  :type 'boolean
+  :version "green")
+
+(defun work-mode ()
+  "turn on some usuful minor mode like display-line-numbers and whitespace"
+  (let (work-mode-ready? res on-or-off derived-mode-check-function)
+    (setq work-mode-ready? nil)
+    (setq derived-mode-check-function
+          (if work-mode-allowed-modes-include-derived-mode
+              (lambda (candi given-mode) ; candi is not used here
+                (derived-mode-p given-mode))
+            nil))
+    (setq res (common-allow-deny-rule-apply major-mode
+                                            work-mode-allowed-modes
+                                            derived-mode-check-function))
+    (setq work-mode-ready? (if (eq (car res) 'allowed) t nil))
+      ;;(let (status stage)
+      ;;  (setq status (car res))
+      ;;  (setq stage  (car (cdr res))) ;; not used
+      ;;  (setq work-mode-ready? (if (eq status 'allowed) t nil))
+    ;; Do real configuration goes here
+    (setq on-or-off (if work-mode-ready? 1 0))
+    (display-line-numbers-mode  on-or-off)
+    (whitespace-mode            on-or-off)))
+
+(add-hook 'after-change-major-mode-hook 'work-mode)
 
 (defun display-line-numbers--turn-on ()
   "turn on line numbers in `display-line-numbers-allowed-modes' but excempting certain major modes defined in `display-line-numbers-exempt-modes'"
-  (if (and (not (minibufferp))
-           (or display-line-numbers-allowed-on-starred-buffers
-               (not string-match "*" (buffer-name)))
-           (or
-            (member major-mode display-line-numbers-allowed-modes)
-            (when display-line-numbers-allowed-modes-include-derived-mode
-              (let (derived-mode?)
-                (dolist (el display-line-numbers-allowed-modes derived-mode?)
-                ;note: last arg derived-mode? will return when dolist finished.
-                  (when (derived-mode-p el)
-                    (setq derived-mode? t))))))
-           (not (member major-mode display-line-numbers-exempt-modes)))
-
-      (display-line-numbers-mode)))
-
-(global-display-line-numbers-mode 1)
-
-;(Setq browse-url-generic-program
-;      (executable-find (getenv "BROWSER"))
-;      browse-url-browser-function 'browse-url-generic)
+  (when (or display-line-numbers-allowed-on-starred-buffers
+            (not string-match "*" (buffer-name)))
+    (display-line-numbers-mode 1)))
 
 ;;; Frame and Buffer Setup (size, theme)
 (setq inhibit-startup-message t)
@@ -188,23 +207,15 @@
 
     (window-resize (minibuffer-window) delta)
     (when greeting-message (message "Have a nice one. ;^]"))))
-
 (add-hook 'window-setup-hook (lambda ()
                                (resize-minibuffer-window t)))
-(add-hook 'after-change-major-mode-hook (lambda ()
-                                          (resize-minibuffer-window)))
+(add-hook 'window-configuration-change-hook (lambda ()
+                                              (resize-minibuffer-window)))
 
 (global-set-key (kbd "C-l") (lambda()
                               (interactive) ; without this emacs will complain
                               (redraw-display)
                               (resize-minibuffer-window)))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ;; neo-tree
 (use-package neotree
@@ -288,8 +299,6 @@
     (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
     ))
 
-(require 'whitespace)
-(setq whitespace-style '(face empty tabs lines-tail trailing))
 (global-whitespace-mode t)
 
 ;;; automatically save last edit place
@@ -297,6 +306,23 @@
 (setq save-place-file "~/.config/emacs/places")
 (setq save-place-forget-unreadable-files nil)
 (save-place-mode 1)
+
+
+;;; Hide Show
+;; fold-dwim
+(use-package fold-dwim :ensure t)
+(global-set-key (kbd "C-]")     'fold-dwim-toggle)
+(global-set-key (kbd "C-x [")    'fold-dwim-hide-all)
+(global-set-key (kbd "C-x ]")    'fold-dwim-show-all)
+
+;;(hideshowvis-symbols)
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -329,14 +355,5 @@
  '(show-paren-style (quote expression))
  '(size-dindication-mode t)
  '(transient-mark-mode t))
-
-;;; Hide Show
-;; fold-dwim
-(use-package fold-dwim :ensure t)
-(global-set-key (kbd "C-]")     'fold-dwim-toggle)
-(global-set-key (kbd "C-x [")    'fold-dwim-hide-all)
-(global-set-key (kbd "C-x ]")    'fold-dwim-show-all)
-
-;;(hideshowvis-symbols)
 
 ;;; init.el ends here
