@@ -70,7 +70,7 @@
     (setq work-mode-ready? nil)
     (setq derived-mode-check-function
           (if work-mode-allowed-modes-include-derived-mode
-              (lambda (candi given-mode) ; candi is not used here
+              (lambda (candi given-mode) ; candi is actually not used here
                 (derived-mode-p given-mode))
             nil))
     (setq res (common-allow-deny-rule-apply major-mode
@@ -90,9 +90,10 @@
 
 (defun display-line-numbers--turn-on ()
   "turn on line numbers in `display-line-numbers-allowed-modes' but excempting certain major modes defined in `display-line-numbers-exempt-modes'"
-  (when (or display-line-numbers-allowed-on-starred-buffers
-            (not string-match "*" (buffer-name)))
-    (display-line-numbers-mode 1)))
+  (if (or display-line-numbers-allowed-on-starred-buffers
+          (not string-match "*" (buffer-name)))
+      (display-line-numbers-mode 1)
+    (display-line-numbers-mode 0)))
 
 ;;; Frame and Buffer Setup (size, theme)
 (setq inhibit-startup-message t)
@@ -148,7 +149,6 @@
           (lambda () (make-initial-buffer-as-bookmark-if-no-file-visited)))
 
 ;;; iBuffer
-;(global-set-key (kbd "C-x C-b") 'ibuffer)
 ;; note: if you're using screen and your escape key is "C-[Bb]",
 ;; you need to type "C-x C-b b"
 (setq ibuffer-saved-filter-groups
@@ -186,6 +186,8 @@
 (ido-mode 1)
 
 (defalias 'list-buffers 'ibuffer)
+; or change the binding
+;(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 (use-package tabbar
   :ensure t
@@ -298,8 +300,6 @@
     (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
     (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
     ))
-
-(global-whitespace-mode t)
 
 ;;; automatically save last edit place
 (require 'saveplace)

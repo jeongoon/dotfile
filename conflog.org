@@ -1,17 +1,27 @@
 #+TAGS: init_el emacslisp
+* Fish
+
 * Emacs
 ** External settings
    [[https://www.emacswiki.org/emacs/EmacsAsDaemon][Emacs as daemon]]
    I used systemd method.
-
-
 ** Emacs lisp study
 *** Difference between eq, eql, equal and equalp
    [[https://stackoverflow.com/questions/547436/whats-the-difference-between-eq-eql-equal-and-equalp-in-common-lisp][{stackoverflow: 547436}]]
+*** dolist
+*** mapc mapcar mapcan
+**** https://www.gnu.org/software/emacs/manual/html_node/elisp/Mapping-Functions.html
+
+*** something like `?:' in Emacs Lisp
+    (setq result (if testsomething-p 'correct 'incorrect))
+*** funcall, apply
+**** https://www.gnu.org/software/emacs/manual/html_node/elisp/Calling-Functions.html
 
 ** DONE make my own mode for programme mode which includes
 *** DONE common-allow-deny-rule
 **** TODO make it version 0.1
+***** checkout the layout of el files
+      https://www.emacswiki.org/emacs/linum-off.el
 *** DONE whitespace
 *** DONE display line numbers mode
 

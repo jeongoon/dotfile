@@ -1,0 +1,27 @@
+startup_message off
+attrcolor  b ".I"
+# Erase background with current bg color
+defbce "on"
+altscreen on
+
+#termcapinfo *-256color ti@:te@ #enable SHIFT-PGUP SHOFT-PGDOWN scroll
+termcapinfo rxvt* ti@:te@ #enable SHIFT-PGUP SHOFT-PGDOWN scroll
+term rxvt-unicode-256color
+defscrollbak 30000
+escape ^Bb
+vbell off
+
+hardstatus alwayslastline
+
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m-%d %{W}%c %{g}]'
+
+# Page Up Page Down to enable copy mode so that we can move around
+# within (splited) window
+
+bindkey -k kN eval "copy" "stuff ^u"
+bindkey -k kP eval "copy" "stuff ^d"
+bindkey -k SR eval "copy" "stuff ^u"
+bindkey -k SF eval "copy" "stuff ^d"
+
+bind o title # change title
+bind * screen -t emacs 8 emacs -nw
