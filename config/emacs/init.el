@@ -9,7 +9,6 @@
 
 (require 'package)
 (setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives '("gnu" .   "http://elpa.gnu.org/packages/"))
 
 (package-initialize)
@@ -21,81 +20,11 @@
 (eval-when-compile
   (require 'use-package))
 
-;;; Global configuration
-(require 'bind-key)
-(use-package diminish :ensure t)
-(setq vc-follow-symlinks t)
-(setq-default major-mode 'text-mode)
-(setq-default indent-tabs-mode nil) ; I prefer not to use indent-tabs-mode
-(add-hook 'prog-mode-hook 'hs-minor-mode)
+;;; Using Org Mode to organise initializing
+(org-babel-load-file (expand-file-name (concat user-emacs-directory
+                                               (convert-standard-filename "myinit.org"))))
 
-(require 'display-line-numbers)
-(setq display-line-numbers-type 'visual) ; setting display-line-numbers isn't working
-(setq display-line-numbers-current-absoulte t)
-
-(require 'whitespace)
-(setq whitespace-style '(face empty tabs lines-tail trailing))
-
-(defcustom display-line-numbers-allowed-on-starred-buffers 'nil
-  "Disable buffers that have stars in them like *Gnu Emacs*"
-  :type 'boolean
-  :group 'display-line-numbers)
-
-(add-to-list 'load-path (concat user-emacs-directory
-                                (convert-standard-filename "my-lisp/")))
-(require 'common-allow-deny-rule)
-
-(defcustom work-mode-allowed-modes '(prog-mode emacs-lisp-mode text-mode)
-  "Major modes on which to enable the display-line-numbers mode and whitespace mode and so on"
-  :group 'work-mode
-  :type 'list
-  :version "green")
-
-(defcustom work-mode-exempt-modes
-  '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode)
-  "Major modes on which to disable the work-mode"
-  :group 'work-mode
-  :type 'list
-  :version "green")
-
-(defcustom work-mode-allowed-modes-include-derived-mode 't
-  "Extends enabling work-mode through all the derived mode from work-mode-allowed mode"
-  :group 'work-mode
-  :type 'boolean
-  :version "green")
-
-(defun work-mode ()
-  "turn on some usuful minor mode like display-line-numbers and whitespace"
-  (let (work-mode-ready? res on-or-off derived-mode-check-function)
-    (setq work-mode-ready? nil)
-    (setq derived-mode-check-function
-          (if work-mode-allowed-modes-include-derived-mode
-              (lambda (candi given-mode) ; candi is actually not used here
-                (derived-mode-p given-mode))
-            nil))
-    (setq res (common-allow-deny-rule-apply major-mode
-                                            work-mode-allowed-modes
-                                            derived-mode-check-function))
-    (setq work-mode-ready? (if (eq (car res) 'allowed) t nil))
-      ;;(let (status stage)
-      ;;  (setq status (car res))
-      ;;  (setq stage  (car (cdr res))) ;; not used
-      ;;  (setq work-mode-ready? (if (eq status 'allowed) t nil))
-    ;; Do real configuration goes here
-    (setq on-or-off (if work-mode-ready? 1 0))
-    (display-line-numbers-mode  on-or-off)
-    (whitespace-mode            on-or-off)))
-
-(add-hook 'after-change-major-mode-hook 'work-mode)
-
-(defun display-line-numbers--turn-on ()
-  "turn on line numbers in `display-line-numbers-allowed-modes' but excempting certain major modes defined in `display-line-numbers-exempt-modes'"
-  (if (or display-line-numbers-allowed-on-starred-buffers
-          (not string-match "*" (buffer-name)))
-      (display-line-numbers-mode 1)
-    (display-line-numbers-mode 0)))
-
-;;; Frame and Buffer Setup (size, theme)
+;; Frame and Buffer Setup (size, theme)
 (setq inhibit-startup-message t)
 (if (display-graphic-p) ;; or (window-system)
     ; THEN
@@ -131,22 +60,6 @@
   (use-package gruvbox-theme
   :ensure t
   :config (load-theme 'gruvbox t)))
-
-;;; open bookmark when emacs is running withougt visiting a file.
-;;  note: it is not working when emacs is running as daemon
-(defun make-initial-buffer-as-bookmark-if-no-file-visited ()
-  (let ((no-file-visited t)
-        (args command-line-args))
-    (dolist (arg (cdr args))
-      (progn
-        (if (file-exists-p arg)
-            (setq no-file-visited nil))))
-    (when no-file-visited
-      (bookmark-bmenu-list) ;; create a book mark buffer first
-      (setq initial-buffer-choice (lambda ()(get-buffer "*Bookmark List*"))))))
-
-(add-hook 'after-init-hook
-          (lambda () (make-initial-buffer-as-bookmark-if-no-file-visited)))
 
 ;;; iBuffer
 ;; note: if you're using screen and your escape key is "C-[Bb]",
@@ -188,6 +101,12 @@
 (defalias 'list-buffers 'ibuffer)
 ; or change the binding
 ;(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+;;; Usseful Packages
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode))
 
 (use-package tabbar
   :ensure t
@@ -271,9 +190,21 @@
 
 (add-to-list 'ac-modes 'raku-mode)
 
+;; https://github.com/abo-abo/avy
+(use-package avy
+  :ensure t
+  :config
+  (progn
+    ; I use emacs in termial many times but `C-:' doesn't seem to work
+    (global-set-key (kbd "M-:") 'avy-goto-char-timer)
+    (setq avy-timeout-seconds 0.35)
+    ; "You can actually replace the M-g g binding of goto-line,
+    ; since if you enter a digit for avy-goto-line, it will switch to
+    ; goto-line with that digit already entered."
+    (global-set-key (kbd "M-g g") 'avy-goto-line)))
+
 ;; https://cestlaz.github.io/posts/using-emacs-6-swiper/
-(use-package counsel
-  :ensure t )
+(use-package counsel :ensure t )
 
 (use-package swiper
   :ensure try
@@ -310,10 +241,11 @@
 
 ;;; Hide Show
 ;; fold-dwim
-(use-package fold-dwim :ensure t)
-(global-set-key (kbd "C-]")     'fold-dwim-toggle)
-(global-set-key (kbd "C-x [")    'fold-dwim-hide-all)
-(global-set-key (kbd "C-x ]")    'fold-dwim-show-all)
+(use-package fold-dwim :ensure t
+  :config (progn
+            (global-set-key (kbd "C-]")     'fold-dwim-toggle)
+            (global-set-key (kbd "C-x [")    'fold-dwim-hide-all)
+            (global-set-key (kbd "C-x ]")    'fold-dwim-show-all) ))
 
 ;;(hideshowvis-symbols)
 
@@ -343,7 +275,7 @@
  '(nil nil t)
  '(package-selected-packages
    (quote
-    (tabbar w3m raku-mode fold-dwim-org fold-dwim gruvbox-theme auctex fish-mode counsel ivy auto-complete magit use-package nov flycheck-perl6 cl-lib-highlight cl-generic cl-format airline-themes)))
+    (which-key avy tabbar w3m raku-mode fold-dwim-org fold-dwim gruvbox-theme auctex fish-mode counsel ivy auto-complete magit use-package nov flycheck-perl6 cl-lib-highlight cl-generic cl-format airline-themes)))
  '(paren-mode (quote sexp) nil (paren))
  '(query-user-mail-address nil)
  '(safe-local-variable-values
