@@ -1,0 +1,114 @@
+#+STARTUP: overview
+#+PROPERTY: header-args :comment yes :result silent
+* repos
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+#+END_SRC
+
+* global modes
+#+BEGIN_SRC emacs-lisp
+(require 'bind-key)
+(use-package diminish :ensure t)
+(setq vc-follow-symlinks t)
+(setq-default major-mode 'text-mode)
+(setq-default indent-tabs-mode nil) ; I prefer not to use indent-tabs-mode
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+
+(require 'whitespace)
+(setq whitespace-style '(face empty tabs lines-tail trailing))
+#+END_SRC
+
+* display line numbers
+  why font lock is not working here???
+#+BEGIN_SRC emacs-lisp
+(require 'display-line-numbers)
+(setq display-line-numbers t)
+(setq display-line-numbers-type t) ; setting display-line-numbers isn't enough
+
+(setq display-line-numbers-current-absoulte t)
+
+(defcustom display-line-numbers-allowed-on-starred-buffers 'nil
+  "Disable buffers that have stars in them like *Gnu Emacs*"
+  :type 'boolean
+  :group 'display-line-numbers)
+
+(defun display-line-numbers--turn-on ()
+  "turn on line numbers in `display-line-numbers-allowed-modes' but excluding
+certain major modes defined in `display-line-numbers-exempt-modes'"
+  (if (or display-line-numbers-allowed-on-starred-buffers
+          (not string-match "*" (buffer-name)))
+      (display-line-numbers-mode 1)
+    (display-line-numbers-mode 0)))
+#+END_SRC
+
+* work-mode for me
+  I don't think that it is good habit to make minor mode is on globally
+  so I make an mode to enable some useful stuff
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path (concat user-emacs-directory
+                                (convert-standard-filename "my-lisp/")))
+(require 'common-allow-deny-rule)
+
+(defcustom work-mode-allowed-modes '(prog-mode emacs-lisp-mode text-mode)
+  "Major modes on which to enable the display-line-numbers mode and whitespace mode and so on"
+  :group 'work-mode
+  :type 'list
+  :version "green")
+
+(defcustom work-mode-exempt-modes
+  '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode)
+  "Major modes on which to disable the work-mode"
+  :group 'work-mode
+  :type 'list
+  :version "green")
+
+(defcustom work-mode-allowed-modes-include-derived-mode 't
+  "Extends enabling work-mode through all the derived mode from work-mode-allowed mode"
+  :group 'work-mode
+  :type 'boolean
+  :version "green")
+
+(defun work-mode ()
+  "turn on some usuful minor mode like display-line-numbers and whitespace"
+  (let (work-mode-ready? res on-or-off derived-mode-check-function)
+    (setq work-mode-ready? nil)
+    (setq derived-mode-check-function
+          (if work-mode-allowed-modes-include-derived-mode
+              (lambda (candi given-mode) ; candi is actually not used here
+                (derived-mode-p given-mode))
+            nil))
+    (setq res (common-allow-deny-rule-apply major-mode
+                                            work-mode-allowed-modes
+                                            derived-mode-check-function))
+    (setq work-mode-ready? (if (eq (car res) 'allowed) t nil))
+      ;;(let (status stage)
+      ;;  (setq status (car res))
+      ;;  (setq stage  (car (cdr res))) ;; not used
+      ;;  (setq work-mode-ready? (if (eq status 'allowed) t nil))
+    ;; Do real configuration goes here
+    (setq on-or-off (if work-mode-ready? 1 0))
+    (display-line-numbers-mode  on-or-off)
+    (whitespace-mode            on-or-off)))
+
+(add-hook 'after-change-major-mode-hook 'work-mode)
+#+END_SRC
+
+* Open Book mark by Default
+
+#+BEGIN_SRC emacs-lisp
+;;; open bookmark when emacs is running withougt visiting a file.
+;;  note: it is not working when emacs is running as daemon
+(defun make-initial-buffer-as-bookmark-if-no-file-visited ()
+  (let ((no-file-visited t)
+        (args command-line-args))
+    (dolist (arg (cdr args))
+      (progn
+        (if (file-exists-p arg)
+            (setq no-file-visited nil))))
+    (when no-file-visited
+      (bookmark-bmenu-list) ;; create a book mark buffer first
+      (setq initial-buffer-choice (lambda ()(get-buffer "*Bookmark List*"))))))
+
+(add-hook 'after-init-hook
+          (lambda () (make-initial-buffer-as-bookmark-if-no-file-visited)))
+#+END_SRC
