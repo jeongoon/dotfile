@@ -5,6 +5,7 @@
 ** TODO Study more about tagging
 ** TODO Study more shortcut
 *** write down some where not to forget
+** resource: [[https://zzamboni.org/post/beautifying-org-mode-in-emacs/]]
 
 * Fish
 
@@ -12,10 +13,9 @@
 ** From Mike Zamansky
 *** Using emacs 10 - org init
 **** TODO change init.el to use org mode: looks fancy and organised :-)
-     - [[https://www.youtube.com/watch?v=EX9PKK3EMaw][org init file]]
-     - youtube: https://www.youtube.com/watch?v=EX9PKK3EMaw
+     - youtube: [[https://www.youtube.com/watch?v=EX9PKK3EMaw]]
 *** DONE Which-key mode
-** External settings
+** Outside Emacs settings
    [[https://www.emacswiki.org/emacs/EmacsAsDaemon][Emacs as daemon]]
    I used systemd method.
 ** Emacs lisp study
