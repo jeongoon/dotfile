@@ -1,5 +1,6 @@
 #+TAGS: init_el emacslisp* Org-Mode Shortcuts
   - C-c C-l: input some link
+  - C-c C-o: open link
 * Org-Mode
 ** TODO Study more about tagging
 ** TODO Study more shortcut
@@ -11,14 +12,9 @@
 * Emacs
 ** From Mike Zamansky
 *** Using emacs 10 - org init
-<<<<<<< HEAD
 **** DONE change init.el to use org mode: looks fancy and organised :-)
      - [[https://www.youtube.com/watch?v=EX9PKK3EMaw][org init file]]
      - youtube: https://www.youtube.com/watch?v=EX9PKK3EMaw
-=======
-**** TODO change init.el to use org mode: looks fancy and organised :-)
-     - youtube: [[https://www.youtube.com/watch?v=EX9PKK3EMaw]]
->>>>>>> 4f52d018f9bee32efeb92f8ad5b225c1bc082ed9
 *** DONE Which-key mode
 ** Outside Emacs settings
    [[https://www.emacswiki.org/emacs/EmacsAsDaemon][Emacs as daemon]]
