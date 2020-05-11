@@ -140,12 +140,7 @@
             (set-fontset-font "fontset-fantasque_kr" 'unicode
                               (font-spec :family "Weather Icons") nil 'append)
             (set-fontset-font "fontset-fantasque_kr" 'unicode
-<<<<<<< HEAD
-            (set-fontset-font "fontset-fantasque_kr" 'unicode
                               (font-spec :name "Segoe UI Emoji") nil 'append)
-
-=======
->>>>>>> refs/remotes/origin/master
                               (font-spec :name "FantasqueSansMono Nerd Font Mono")
                               nil 'append)
             (set-fontset-font "fontset-fantasque_kr" 'ascii
@@ -153,14 +148,6 @@
             (set-fontset-font "fontset-fantasque_kr" 'hangul
     ;                          (font-spec :name "Noto Sans CJK KR"))
                               (font-spec :name "KoPub Batang"))
-<<<<<<< HEAD
-=======
-            (set-fontset-font "fontset-fantasque_kr"
-                              (cons (decode-char 'ucs #x1f170)
-                                    (decode-char 'ucs #x1fad6))
-                              (font-spec :name "Segoe UI Emoji"))
->>>>>>> refs/remotes/origin/master
-
             (setq frame-default-left (- (x-display-pixel-width) 698)) ;; 700 when font size is 14
             (if (< (x-display-pixel-height) 698)
                 (setq frame-default-height 30)
