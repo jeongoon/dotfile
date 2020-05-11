@@ -15,7 +15,7 @@
 **** DONE change init.el to use org mode: looks fancy and organised :-)
      - [[https://www.youtube.com/watch?v=EX9PKK3EMaw][org init file]]
      - youtube: https://www.youtube.com/watch?v=EX9PKK3EMaw
-*** DONE Which-key mode
+
 ** Outside Emacs settings
    [[https://www.emacswiki.org/emacs/EmacsAsDaemon][Emacs as daemon]]
    I used systemd method.
@@ -39,3 +39,5 @@
       https://www.emacswiki.org/emacs/linum-off.el
 *** DONE whitespace
 *** DONE display line numbers mode
+* Font Config
+  - setting for using all-the-icons packages
