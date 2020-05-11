@@ -103,70 +103,71 @@
           (lambda () (make-initial-buffer-as-bookmark-if-no-file-visited)))
 #+END_SRC
 
-** Frame Setup
+** Frame Setup (frame, default font)
    - General setup for my preference
    - This frame setup is not for everyone
      Because this will move the frame right-hand side and resize to narrow and long
-   - font: Fira Code
+   - font: Fantasque Sans Mono | all-the-icons
    - gruvbox-theme
 #+BEGIN_SRC emacs-lisp
-    (setq inhibit-startup-message t)
-    (if (display-graphic-p) ;; or (window-system)
-        ; THEN
-        (progn
-;          (require 'uim-leim) ;; this is not on melpa
-;          ;; set default IM
-;          (setq default-input-method "korean-byeoru-uim")
-;          (add-hook 'after-change-major-mode-hook
-;                    (lambda () (set-input-method "korean-byeoru-uim")))
+      (setq inhibit-startup-message t)
+      (if (display-graphic-p) ;; or (window-system)
+          ; THEN
+          (progn
+  ;          (require 'uim-leim) ;; this is not on melpa
+  ;          ;; set default IM
+  ;          (setq default-input-method "korean-byeoru-uim")
+  ;          (add-hook 'after-change-major-mode-hook
+  ;                    (lambda () (set-input-method "korean-byeoru-uim")))
+            (set-scroll-bar-mode 'left)
+            (tool-bar-mode -1)
+            ;; use specific font for Korean charset.
+            ;; if you want to use different font size for specific charset,
+            ;; add :size POINT-SIZE in the font-spec.
+            (create-fontset-from-fontset-spec
+             "-CTDB-Fira Code Retina-*-*-*--0-0-0-0-m-0-fontset-fantasque_kr")
+            ;; https://github.com/domtronn/all-the-icons.el
+            (set-fontset-font "fontset-fantasque_kr" 'unicode
+                              (font-spec :family "all-the-icons") nil 'append)
+            (set-fontset-font "fontset-fantasque_kr" 'unicode
+                              (font-spec :family "file-icons") nil 'append)
+            (set-fontset-font "fontset-fantasque_kr" 'unicode
+                              (font-spec :family "Material Icons") nil 'append)
+            (set-fontset-font "fontset-fantasque_kr" 'unicode
+                              (font-spec :family "github-octicons") nil 'append)
+            (set-fontset-font "fontset-fantasque_kr" 'unicode
+                              (font-spec :family "FontAwesome") nil 'append)
+            (set-fontset-font "fontset-fantasque_kr" 'unicode
+                              (font-spec :family "Weather Icons") nil 'append)
+            (set-fontset-font "fontset-fantasque_kr" 'unicode
+            (set-fontset-font "fontset-fantasque_kr" 'unicode
+                              (font-spec :name "Segoe UI Emoji") nil 'append)
 
-          (set-scroll-bar-mode 'left)
-          (tool-bar-mode -1)
-          ;; use specific font for Korean charset.
-          ;; if you want to use different font size for specific charset,
-          ;; add :size POINT-SIZE in the font-spec.
-          (create-fontset-from-fontset-spec
-           "-CTDB-Fira Code Retina-*-*-*--0-0-0-0-m-0-fontset-firacode_kr")
-          (set-fontset-font "fontset-firacode_kr" 'unicode
-                            (font-spec :name "FantasqueSansMono Nerd Font Mono" :size 13))
-          (set-fontset-font "fontset-firacode_kr" 'ascii
-                            (font-spec :name "Fantasque Sans Mono" :size 14))
-          (set-fontset-font "fontset-firacode_kr" 'hangul
-  ;                          (font-spec :name "Noto Sans CJK KR"))
-                            (font-spec :name "KoPub Batang"))
-          (set-fontset-font "fontset-firacode_kr"
-                            (cons (decode-char 'ucs #x1f170)
-                                  (decode-char 'ucs #x1fad6))
-                            (font-spec :name "Segoe UI Emoji"))
-          (create-fontset-from-fontset-spec
-           "-Amazon-Bookerly-*-*-*--0-0-0-0-p-0-fontset-book_kr")
-          (set-fontset-font "fontset-book_kr" 'ascii
-                            (font-spec :name "Bookerly" :size 15))
-          (set-fontset-font "fontset-book_kr" 'hangul
-                            (font-spec :name "KoPub Batang" :size 15))
-          (setq face-font-rescale-alist
-                '(
-                  (".*fantasque sans mono.*" . 1.0)
-                  ))
+                              (font-spec :name "FantasqueSansMono Nerd Font Mono")
+                              nil 'append)
+            (set-fontset-font "fontset-fantasque_kr" 'ascii
+                              (font-spec :name "Fantasque Sans Mono" :size 14))
+            (set-fontset-font "fontset-fantasque_kr" 'hangul
+    ;                          (font-spec :name "Noto Sans CJK KR"))
+                              (font-spec :name "KoPub Batang"))
 
-          ;; you may want to add different for other charset in this way.
-          (setq frame-default-left (- (x-display-pixel-width) 698)) ;; 700 when font size is 14
-          (if (< (x-display-pixel-height) 698)
-              (setq frame-default-height 30)
-              (setq frame-default-height 68))
-          (setq default-frame-alist
-                '((top . 0) (width . 100)
-                  ))
-          (add-to-list 'default-frame-alist (cons 'font "fontset-firacode_kr"))
-          (add-to-list 'default-frame-alist (cons 'left frame-default-left))
-          (add-to-list 'default-frame-alist (cons 'height frame-default-height))
-          (setq initial-frame-alist default-frame-alist)
-          )
-      ;; ELSE
-      ;;; Apply Some theme if on terminal
-      (use-package gruvbox-theme
-      :ensure t
-      :config (load-theme 'gruvbox t)))
+            (setq frame-default-left (- (x-display-pixel-width) 698)) ;; 700 when font size is 14
+            (if (< (x-display-pixel-height) 698)
+                (setq frame-default-height 30)
+                (setq frame-default-height 68))
+            (setq default-frame-alist
+                  '((top . 0) (width . 100)
+                    ))
+            (add-to-list 'default-frame-alist (cons 'font "fontset-fantasque_kr"))
+            (add-to-list 'default-frame-alist (cons 'left frame-default-left))
+            (add-to-list 'default-frame-alist (cons 'height frame-default-height))
+            (setq initial-frame-alist default-frame-alist)
+            )
+        ;; ELSE
+        ;;; Apply Some theme if on terminal
+        (use-package gruvbox-theme
+        :ensure t
+        :config (load-theme 'gruvbox t)))
 #+END_SRC
 ** Powerline vs Doom-modeline vs Spaceline
     - mode-line, modeline (for search)
@@ -174,32 +175,33 @@
     - TODO: I'd like to set some custom value for confirming user install the icons via
       `M-x all-the-icons-install-fonts'
 #+BEGIN_SRC emacs-lisp
-  (use-package all-the-icons :ensure t :straight t)
+    (use-package all-the-icons :ensure t :straight t)
 
-  (cond
-   ((eq work-mode-modeline-preference 'powerline)
-    (use-package powerline :ensure t :straight t)
-    (use-package airline-themes
-      :ensure t
-      :config (load-theme 'airline-gruvbox-dark t)))
+    (cond
+     ((eq work-mode-modeline-preference 'powerline)
+      (use-package powerline :ensure t :straight t)
+      (use-package airline-themes
+        :ensure t
+        :config (load-theme 'airline-gruvbox-dark t)))
 
-   ((eq work-mode-modeline-preference 'doom-modeline)
-    (use-package doom-modeline
-      :ensure t
-      :defer t
-      :hook (after-init . doom-modeline-mode)))
+     ((eq work-mode-modeline-preference 'doom-modeline)
+      (use-package doom-modeline
+        :ensure t
+        :defer t
+        :hook (after-init . doom-modeline-mode)))
 
-   ((eq work-mode-modeline-preference 'spaceline)
-    (use-package eyeliner
-      :ensure t
-      :straight (eyeliner :type git
-                          :host github
-                          :repo "dustinlacewell/eyeliner")
-      :config
-      (progn
-        (autoload 'projectile-project-p "projectile") ; spaceline will complain without it
-        (require 'eyeliner)
-        (eyeliner/install)))))
+     ((eq work-mode-modeline-preference 'spaceline)
+      (use-package eyeliner
+        :ensure t
+        :straight (eyeliner :type git
+                            :host github
+                            :repo "dustinlacewell/eyeliner")
+        :config
+        (progn
+          (autoload 'projectile-project-p "projectile") ; spaceline will complain without it
+          (require 'eyeliner)
+          (eyeliner/install)))))
+
 #+END_SRC
 ** Not So MiniBuffer
 #+BEGIN_SRC emacs-lisp
@@ -592,7 +594,7 @@ certain major modes defined in `display-line-numbers-exempt-modes'"
                               (- current-available visual-wrap-column))))))
 #+END_SRC
 
-* Experiment
+*  Experiment
   - hide some minor mode
   [[https://emacs.stackexchange.com/questions/3925/hide-list-of-minor-modes-in-mode-line/3928#comment5928_3928]]
 #+BEGIN_SRC emacs-lisp
@@ -617,3 +619,4 @@ certain major modes defined in `display-line-numbers-exempt-modes'"
 (add-hook 'after-change-major-mode-hook 'purge-minor-modes)
 
 #+END_SRC
+))

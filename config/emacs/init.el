@@ -38,7 +38,7 @@
     ((indent-level . 8)
      (cperl-indent-parens-as-block . t)
      (cperl-close-paren-offset . -4))))
- '(work-mode-modeline-preference (quote spaceline)))
+ '(work-mode-modeline-preference (quote doom-modeline)))
 
 
  ; useful when you're using symlinked configuration file
