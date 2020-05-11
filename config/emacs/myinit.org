@@ -141,6 +141,7 @@
                               (font-spec :family "Weather Icons") nil 'append)
             (set-fontset-font "fontset-fantasque_kr" 'unicode
                               (font-spec :name "Segoe UI Emoji") nil 'append)
+            (set-fontset-font "fontset-fantasque_kr" 'unicode                              
                               (font-spec :name "FantasqueSansMono Nerd Font Mono")
                               nil 'append)
             (set-fontset-font "fontset-fantasque_kr" 'ascii
