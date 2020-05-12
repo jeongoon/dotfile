@@ -8,6 +8,8 @@
 #+END_SRC
 
 * Straight.el
+  - I used this package for eyeliner(a modline generator) for the first time
+  - this is quite useful when you are using pacakge directly from git repo which is not on elpa yet
 #+BEGIN_SRC emacs-lisp
   (defvar bootstrap-version)
   (let ((bootstrap-file
@@ -141,7 +143,7 @@
                               (font-spec :family "Weather Icons") nil 'append)
             (set-fontset-font "fontset-fantasque_kr" 'unicode
                               (font-spec :name "Segoe UI Emoji") nil 'append)
-            (set-fontset-font "fontset-fantasque_kr" 'unicode                              
+            (set-fontset-font "fontset-fantasque_kr" 'unicode
                               (font-spec :name "FantasqueSansMono Nerd Font Mono")
                               nil 'append)
             (set-fontset-font "fontset-fantasque_kr" 'ascii
@@ -168,37 +170,50 @@
         :config (load-theme 'gruvbox t)))
 #+END_SRC
 ** Powerline vs Doom-modeline vs Spaceline
-    - mode-line, modeline (for search)
-    - Powerline is fancy Doom-modeline looks clean but needs some fonts installed
-    - TODO: I'd like to set some custom value for confirming user install the icons via
+    * mode-line, modeline (for search)
+    * Powerline is fancy Doom-modeline looks clean but needs some fonts installed
+    * TODO I'd like to set some custom value for confirming user install the icons via
       `M-x all-the-icons-install-fonts'
+*** TODO spaceline not working on terminal (going back to default: doom?)
 #+BEGIN_SRC emacs-lisp
-    (use-package all-the-icons :ensure t :straight t)
+  (use-package all-the-icons :ensure t :straight t)
 
-    (cond
-     ((eq work-mode-modeline-preference 'powerline)
-      (use-package powerline :ensure t :straight t)
-      (use-package airline-themes
-        :ensure t
-        :config (load-theme 'airline-gruvbox-dark t)))
+  (let ((setting-modeline? t) (curr-modeline work-mode-modeline-preference))
+  (while setting-modeline?
+  (catch 'modeline-switch
 
-     ((eq work-mode-modeline-preference 'doom-modeline)
-      (use-package doom-modeline
-        :ensure t
-        :defer t
-        :hook (after-init . doom-modeline-mode)))
+        (cond
+         ((eq curr-modeline 'powerline)
+          (use-package powerline :ensure t :straight t)
+          (use-package airline-themes
+            :ensure t
+            :config (load-theme 'airline-gruvbox-dark t))
+          (setq setting-modeline? nil))
 
-     ((eq work-mode-modeline-preference 'spaceline)
-      (use-package eyeliner
-        :ensure t
-        :straight (eyeliner :type git
-                            :host github
-                            :repo "dustinlacewell/eyeliner")
-        :config
-        (progn
-          (autoload 'projectile-project-p "projectile") ; spaceline will complain without it
-          (require 'eyeliner)
-          (eyeliner/install)))))
+         ((eq curr-modeline 'doom-modeline)
+          (use-package doom-modeline
+            :ensure t
+            :defer t
+            :hook (after-init . doom-modeline-mode))
+          (setq setting-modeline? nil))
+
+         ((eq curr-modeline 'spaceline)
+          (unless (display-graphic-p)
+            (message "your preffered modelines 'spaceline is not working on terminal: going back to: %s" 'doom-modeline)
+            (setq curr-modeline 'doom-modeline)
+            (throw 'modeline-switch 'doom-modeline))
+
+          (use-package eyeliner
+            :ensure t
+            :straight (eyeliner :type git
+                                :host github
+                                :repo "dustinlacewell/eyeliner")
+            :config
+            (progn
+              (autoload 'projectile-project-p "projectile") ; eyeliner will complain without it
+              (require 'eyeliner)
+              (eyeliner/install)))
+          (setq setting-modeline? nil))))))
 
 #+END_SRC
 ** Not So MiniBuffer
@@ -231,7 +246,10 @@
     (global-set-key (kbd "C-x o") 'ace-window))
 #+END_SRC
 * Keyboard / Cursor / Shortcuts
-  - XXX: projectile must be loaded first here
+** Input Method (Korean)
+#+BEGIN_SRC emacs-lisp
+  (setq default-input-method "korean-hangul3")
+#+END_SRC
 ** Projectile
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
@@ -408,9 +426,17 @@
 ;(global-set-key (kbd "C-x C-b") 'ibuffer)
 #+END_SRC
 * Org-mode
+** Some abbreviation
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'org-structure-template-alist '("se" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+(add-to-list 'org-structure-template-alist '("SE" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+
 #+END_SRC
+** Todo Keywords
+#+BEGIN_SRC emacs-lisp
+  (setq org-todo-keywords
+        '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+#+END_SRC
+
 * Programming, Editing
 ** Saveplace
    automatically save last edit place
