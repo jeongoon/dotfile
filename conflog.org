@@ -2,16 +2,20 @@ Configuration Thougts and Log -*- mode: org -*-
 #+TAGS: { @Work(w) @Home(h) } @Emacs(e) @OrgMode(o) @Shortcuts(s) @Font(f)
   - C-c C-l: input some link
   - C-c C-o: open link
-  - C-u Tab: 
+  - C-u Tab: Global cycling
+  - C-c Tab: (outline-show-children)
+  - C-c C-k: (outline-show-all)
 
 * Org-Mode
 ** TODO Study more about tagging
-** TODO Study more shortcut
+   difference??
+** IN-PROGRESS Study more shortcut
 *** write down some where not to forget
 ** resource: [[https://zzamboni.org/post/beautifying-org-mode-in-emacs/]]
 
-* Fish
-
+*** 1
+*** 2
+*** 3
 * Emacs
 ** From Mike Zamansky
 *** DONE Using emacs 10

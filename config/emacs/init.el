@@ -25,6 +25,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(bookmark-bmenu-toggle-filenames nil)
  '(column-number-mode t)
  '(custom-safe-themes
    (quote
@@ -40,12 +41,12 @@
      (cperl-close-paren-offset . -4))))
  '(work-mode-modeline-preference (quote spaceline)))
 
-
  ; useful when you're using symlinked configuration file
 (setq vc-follow-symlinks t)
 ;;; Using Org Mode to organise initializing
-(org-babel-load-file (expand-file-name (concat user-emacs-directory
-                                               (convert-standard-filename "myinit.org"))))
+(org-babel-load-file (expand-file-name
+                      (concat user-emacs-directory
+                              (convert-standard-filename "myoungjin-init.org"))))
 
 ;;(setq tramp-ssh-controlmaster-options
 ;;      "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
@@ -57,6 +58,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
 ;;; init.el ends here
