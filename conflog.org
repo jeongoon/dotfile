@@ -1,6 +1,8 @@
-#+TAGS: init_el emacslisp* Org-Mode Shortcuts
+Configuration Thougts and Log -*- mode: org -*-
+#+TAGS: { @Work(w) @Home(h) } @Emacs(e) @OrgMode(o) @Shortcuts(s) @Font(f)
   - C-c C-l: input some link
   - C-c C-o: open link
+  - C-u Tab: 
 
 * Org-Mode
 ** TODO Study more about tagging

@@ -39,13 +39,21 @@
             (const :tag "Doom"      'doom-modeline)
             (const :tag "Spaceline" 'spaceline))
     :group 'work-mode)
+
+  (defcustom work-mode-modeline-fallback 'doom-modeline
+    "What is your fallback when your preffered modeline is not going to work"
+    :type 'string
+    :group 'work-mode)
+
+
 #+END_SRC
 ** Parenthesis paren-mode
 #+BEGIN_SRC emacs-lisp
 (show-paren-mode 1)
 (setq show-paren-style 'parenthesis) ; or expression
+(setq show-paren-mismatch t)
 (setq show-paren-delay 0)
-;; I prefer to use parent mode
+;; I prefer to use paren-mode
 ;(setq blink-matching-paren-on-screen t)
 #+END_SRC
 
@@ -86,6 +94,11 @@
 (setq eldoc-minor-mode-string (if (display-graphic-p) "📚" "ED"))
 #+END_SRC
 * Apperance / Window
+** Fonts
+   (use-package all-the-icons :ensure t :straight t)
+*** TODO : how to inform the user to install via
+    =M-x all-the-icons-install-fonts= ???
+
 ** Open Bookmark by Default
 #+BEGIN_SRC emacs-lisp
 ;;; open bookmark when emacs is running withougt visiting a file.
@@ -172,50 +185,53 @@
 ** Powerline vs Doom-modeline vs Spaceline
     * mode-line, modeline (for search)
     * Powerline is fancy Doom-modeline looks clean but needs some fonts installed
-    * TODO I'd like to set some custom value for confirming user install the icons via
-      `M-x all-the-icons-install-fonts'
+   
 *** TODO spaceline not working on terminal (going back to default: doom?)
 #+BEGIN_SRC emacs-lisp
-  (use-package all-the-icons :ensure t :straight t)
-
-  (let ((setting-modeline? t) (curr-modeline work-mode-modeline-preference))
-  (while setting-modeline?
-  (catch 'modeline-switch
-
+  (let ((setting-modeline? t) (curr-ml work-mode-modeline-preference)
+        (fallback-ml work-mode-modeline-fallback) (max-try 10))
+        (message "hi")
+    (while (and setting-modeline? (> max-try 0))
+      (setq max-try (1- max-try))
+      (catch 'modeline-switch
+      (message "current try: %d" max-try)
         (cond
-         ((eq curr-modeline 'powerline)
+         ((eq curr-ml 'powerline)
           (use-package powerline :ensure t :straight t)
           (use-package airline-themes
             :ensure t
             :config (load-theme 'airline-gruvbox-dark t))
           (setq setting-modeline? nil))
 
-         ((eq curr-modeline 'doom-modeline)
+         ((eq curr-ml 'doom-modeline)
           (use-package doom-modeline
             :ensure t
             :defer t
             :hook (after-init . doom-modeline-mode))
           (setq setting-modeline? nil))
 
-         ((eq curr-modeline 'spaceline)
+         ((eq curr-ml 'spaceline)
           (unless (display-graphic-p)
-            (message "your preffered modelines 'spaceline is not working on terminal: going back to: %s" 'doom-modeline)
-            (setq curr-modeline 'doom-modeline)
-            (throw 'modeline-switch 'doom-modeline))
+            (message "your preffered modelines 'spaceline is not working on terminal: going back to: %s" fallback-ml)
+            (setq curr-ml fallback-ml)
+            (throw 'modeline-switch fallback-ml))
 
-          (use-package eyeliner
-            :ensure t
-            :straight (eyeliner :type git
-                                :host github
-                                :repo "dustinlacewell/eyeliner")
-            :config
-            (progn
-              (autoload 'projectile-project-p "projectile") ; eyeliner will complain without it
-              (require 'eyeliner)
-              (eyeliner/install)))
-          (setq setting-modeline? nil))))))
-
+            (use-package eyeliner
+              :ensure t
+              :straight (eyeliner :type git
+                                  :host github
+                                  :repo "dustinlacewell/eyeliner")
+              :config
+              (progn
+                ; spaceline + eyeliner will complain without it
+                (autoload 'projectile-project-p "projectile")
+                (require 'eyeliner)
+                (eyeliner/install)))
+            (setq setting-modeline? nil))))))
 #+END_SRC
+
+#+RESULTS:
+
 ** Not So MiniBuffer
 #+BEGIN_SRC emacs-lisp
   (setq resize-mini-windows nil) ; set nil to keep size after resizing minibuffer
