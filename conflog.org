@@ -1,21 +1,20 @@
 Configuration Thougts and Log -*- mode: org -*-
 #+TAGS: { @Work(w) @Home(h) } @Emacs(e) @OrgMode(o) @Shortcuts(s) @Font(f)
-  - C-c C-l: input some link
-  - C-c C-o: open link
-  - C-u Tab: Global cycling
-  - C-c Tab: (outline-show-children)
-  - C-c C-k: (outline-show-all)
-
 * Org-Mode
 ** TODO Study more about tagging
    difference??
 ** IN-PROGRESS Study more shortcut
+** DONE memorized
+  - C-c C-l: input some link
+  - C-c C-o: open link
+  - C-u Tab: Global cycling
+** HACKING 
+  - C-c Tab: (outline-show-children)
+  - C-c C-k: (outline-show-all)
+
 *** write down some where not to forget
 ** resource: [[https://zzamboni.org/post/beautifying-org-mode-in-emacs/]]
 
-*** 1
-*** 2
-*** 3
 * Emacs
 ** From Mike Zamansky
 *** DONE Using emacs 10
@@ -47,5 +46,7 @@ Configuration Thougts and Log -*- mode: org -*-
       https://www.emacswiki.org/emacs/linum-off.el
 *** DONE whitespace
 *** DONE display line numbers mode
+** TODO Org-mode headline fonts
+
 * Font Config
 ** TODO setting for using all-the-icons packages
