@@ -46,7 +46,8 @@ Configuration Thougts and Log -*- mode: org -*-
       https://www.emacswiki.org/emacs/linum-off.el
 *** DONE whitespace
 *** DONE display line numbers mode
-** TODO Org-mode headline fonts
+** DONE Org-mode headline fonts
+** DONE Another Bookmark: BM [[https://github.com/joodland/bm]]
 
 * Font Config
 ** TODO setting for using all-the-icons packages
