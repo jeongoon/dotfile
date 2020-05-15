@@ -133,7 +133,7 @@
 (setq whitespace-style '(face empty tabs lines-tail trailing))
 #+END_SRC
 ** Diminish
-*** TODO DO NOT REPEAT YOUR SELF
+*** TODO DO NOT REPEAT YOURSELF
 #+BEGIN_SRC emacs-lisp
 (eval-after-load "auto-revert"
   '(diminish 'auto-revert-mode))
@@ -434,6 +434,16 @@
     :type 'boolean
     :version "green")
 
+  (defcustom work-mode-enabled-major-mode
+    '(display-line-numbers-mode
+      whitespace-mode
+      prettify-symbols-mode
+      highlight-indent-guides-mode)
+    "Which minor mode will be allowed when work-mode is activated"
+    :group 'work-mode
+    :type 'list
+    :version "green")
+
   (defun work-mode ()
     "turn on some usuful minor mode like display-line-numbers and whitespace"
     (let (work-mode-ready? res on-or-off derived-mode-check-function)
@@ -453,17 +463,14 @@
         ;;  (setq work-mode-ready? (if (eq status 'allowed) t nil)))
       ;; Do real configuration goes here
       (setq on-or-off (if work-mode-ready? 1 0))
-      (dolist (mode-name '(display-line-numbers-mode
-                           whitespace-mode
-                           prettify-symbols-mode
-                           highlight-indent-guides-mode))
-      (display-line-numbers-mode  on-or-off)
-      (whitespace-mode            on-or-off)
-      (prettify-symbols-mode      on-or-off)
-      (highlight-indent-guides-mode on-or-off))))
+      (dolist (mode-name work-mode-enabled-major-mode nil)
+        (funcall mode-name on-or-off))))
 
     (add-hook 'after-change-major-mode-hook 'work-mode)
 #+END_SRC
+
+#+RESULTS:
+
 * General Programming
 ** Prettify-Symbols-mode
 #+BEGIN_SRC emacs-lisp
@@ -539,7 +546,10 @@
 #+END_SRC
 ** Todo Keywords
 #+BEGIN_SRC emacs-lisp
-(setq org-todo-keywords '((sequence "TODO(t)" "HACKING(h)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "LEARNING(l)" "HACKING(h)" "WAITING(w)"
+                    "|"
+                    "DONE(d)" "CANCELLED(c)")))
 #+END_SRC
 
 ** Org bullet mode
