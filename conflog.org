@@ -8,7 +8,7 @@ Configuration Thougts and Log -*- mode: org -*-
   - C-c C-l: input some link
   - C-c C-o: open link
   - C-u Tab: Global cycling
-** HACKING 
+** LEARNING 
   - C-c Tab: (outline-show-children)
   - C-c C-k: (outline-show-all)
 

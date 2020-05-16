@@ -82,7 +82,7 @@
 #+BEGIN_SRC emacs-lisp
 (use-package paredit
   :ensure t
-  :diminish paredit-mode
+;;  :diminish paredit-mode
   :config
   (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
   (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
@@ -96,7 +96,7 @@
 ;; Ensure paredit is used EVERYWHERE!
 (use-package paredit-everywhere
   :ensure t
-  :diminish paredit-everywhere-mode
+;;  :diminish paredit-everywhere-mode
   :config
   (add-hook 'list-mode-hook #'paredit-everywhere-mode))
 
@@ -133,33 +133,30 @@
 (setq whitespace-style '(face empty tabs lines-tail trailing))
 #+END_SRC
 ** Diminish
-*** TODO DO NOT REPEAT YOURSELF
+  * if you are using spaceline with eyeliner, you don't really need to use diminish
 #+BEGIN_SRC emacs-lisp
-(eval-after-load "auto-revert"
-  '(diminish 'auto-revert-mode))
-(eval-after-load "beacon"
-  '(diminish 'beacon-mode))
-(eval-after-load "ivy"
-  '(diminish 'ivy-mode))
-(eval-after-load "projectile"
-  '(diminish 'projectile-mode))
-(eval-after-load "projectile-rails"
-  '(diminish 'projectile-rails-mode))
-(eval-after-load "rainbow-mode"
-  '(diminish 'rainbow-mode))
-(eval-after-load "undo-tree"
-  '(diminish 'undo-tree-mode))
-(eval-after-load "which-key"
-  '(diminish 'which-key-mode))
-(eval-after-load "flycheck"
-  '(diminish 'flycheck-mode))
-(eval-after-load "whitespace"
-  '(diminish 'whitespace-mode))
-;;(eval-after-load "hs-minor"  ;; not working
-;;  '(diminish 'hs-minor-mode))
-(add-hook 'hs-minor-mode-hook (lambda () (diminish 'hs-minor-mode))) ;; use instead
-(setq eldoc-minor-mode-string (if (display-graphic-p) "📚" "Edoc"))
+  (require 'diminish)
+  (let (package=string mode-string)
+    (dolist (package-symbol '(auto-revert
+                              beacon which-key
+                              ivy hs-minor whitespace
+                              undo-tree
+                              projectile projectile-rails
+                              flycheck))
+      (setq package-string (symbol-name package-symbol))
+      (setq mode-string (concat package-string "-mode"))
+
+  ;; XXX: not working
+  ;;    (eval-after-load package-string
+  ;;      `(diminish (quote ,mode-string)))
+  ;; WORKAROUND
+      (add-hook (intern (concat mode-string "-hook"))
+                `(lambda () (diminish (intern ,mode-string))))
+      ))
+
+  (setq eldoc-minor-mode-string (if (display-graphic-p) "📚" "Edoc"))
 #+END_SRC
+*** DONE [2020-05-16 Sat] DO NOT REPEAT YOURSELF
 * Apperance / Window
 ** Font Install
    (use-package all-the-icons :ensure t :straight t)
@@ -167,6 +164,7 @@
     =M-x all-the-icons-install-fonts= ???
 
 ** Frame Setup (frame, default font)
+**** TODO check this out [[https://github.com/kuanyui/.emacs.d/blob/master/rc/rc-basic.el#L102]]
    - General setup for my preference
    - This frame setup is not for everyone
      Because this will move the frame right-hand side and resize to narrow and long
@@ -224,10 +222,10 @@
 #+END_SRC
 
 ** Modeline: Powerline vs Doom-modeline vs Spaceline
-    + mode-line, modeline (for search)
-    + Powerline is fancy Doom-modeline looks clean but needs some fonts installed
-   
-*** DONE [2020-05-14 Thu] spaceline not working on terminal -> going back to fallback modeline
+*** Desc / Code
+    * mode-line, modeline (for search)
+    * Powerline is fancy Doom-modeline looks clean but needs some fonts installed
+
 #+BEGIN_SRC emacs-lisp
   (let ((setting-modeline? t) (curr-ml work-mode-modeline-preference)
         (fallback-ml work-mode-modeline-fallback) (max-try 10))
@@ -268,14 +266,17 @@
                 (eyeliner/install)))
             (setq setting-modeline? nil))))))
 #+END_SRC
+   
+*** DONE [2020-05-14 Thu] spaceline not working on terminal -> going back to fallback modeline
+*** TODO Use defcustom for powerline theme (default, airline:(with theme name)) ...
 
 ** Not So MiniBuffer
 #+BEGIN_SRC emacs-lisp
-  (setq resize-mini-windows nil) ; set nil to keep size after resizing minibuffer
+  (setq resize-mini-windows nil) ;; set nil to keep size after resizing minibuffer
   (defun resize-minibuffer-window (&optional greeting-message)
     (interactive) ; needed because we will use inside global-set-key as well
     (let* ((minibuffer-orig-height (window-size (minibuffer-window)))
-           (minibuffer-new-height 6)
+           (minibuffer-new-height 7)
            (delta (- minibuffer-new-height minibuffer-orig-height))
            )
 
