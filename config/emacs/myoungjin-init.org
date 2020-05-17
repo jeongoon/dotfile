@@ -7,7 +7,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 #+END_SRC
 
-* Straight.el
+* Straight.el - package directly from git repo
   - I used this package for eyeliner(a modline generator) for the first time
   - this is quite useful when you are using pacakge directly from git repo which is not on elpa yet
 #+BEGIN_SRC emacs-lisp
@@ -23,6 +23,7 @@
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
+  (require 'straight)
 #+END_SRC
 
 * MyJin Package | Library | Functions
@@ -55,11 +56,19 @@
   (global-hl-line-mode 1)
 
   (defcustom work-mode-modeline-preference 'powerline
-    "What is your favourite modeilne ('powerline 'doom-modeline 'spaceline)"
+    "What is your favourite modeilne ('powerline 'powerline+airline
+  'doom-modeline 'spaceline+eyeliner)"
+
     :type '(choice
             (const :tag "Powerline" 'powerline)
+            (const :tag "Powerline" 'powerline+airline)
             (const :tag "Doom"      'doom-modeline)
-            (const :tag "Spaceline" 'spaceline))
+            (const :tag "Spaceline" 'spaceline+eyeliner))
+    :group 'work-mode)
+
+  (defcustom work-mode-powerline+airline-theme 'airline-gruvbox-dark
+    "what is your airline theme to use?"
+    :type 'string
     :group 'work-mode)
 
   (defcustom work-mode-modeline-fallback 'doom-modeline
@@ -78,28 +87,24 @@
 ;;(setq blink-matching-paren-on-screen t)
 #+END_SRC
 
-** Parenthesis / paredit
+** Parenthesis / ParEdit
 #+BEGIN_SRC emacs-lisp
-(use-package paredit
-  :ensure t
-;;  :diminish paredit-mode
-  :config
-  (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-  (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-  (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-  (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-  (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
-  :bind (("C-c d" . paredit-forward-down))
-  )
+  (use-package paredit
+    :ensure t
+    :config
+    (progn
+      (add-hook 'prog-mode-hook #'enable-paredit-mode)
+      (global-set-key (kbd "C-c d") #'paredit-forward-down)
+      ;; Some Key binding is not working under my environment (gnome-3, terminal)
+      (global-set-key (kbd "C-c s") #'paredit-splice-sexp)
+      (global-set-key (kbd "C-c <left>") #'paredit-backward-slurp-sexp) ; WORKAROUND not working with :bind keyward
+      (global-set-key (kbd "C-c <right>")  #'paredit-backward-barf-sexp)))
 
-;; Ensure paredit is used EVERYWHERE!
-(use-package paredit-everywhere
-  :ensure t
-;;  :diminish paredit-everywhere-mode
-  :config
-  (add-hook 'list-mode-hook #'paredit-everywhere-mode))
-
+  ;;(use-package paredit-everywhere
+  ;;  :ensure t
+  ;;  :diminish paredit-everywhere-mode
+  ;;  :config
+  ;;  (add-hook 'list-mode-hook #'paredit-everywhere-mode))
 #+END_SRC
 ** Parenthesis  / highlight-praentheses
 *** TODO What is diffence between #' vs '
@@ -107,7 +112,6 @@
 #+BEGIN_SRC emacs-lisp
 (use-package highlight-parentheses
   :ensure t
-  :diminish highlight-parentheses-mode
   :config
   (add-hook 'emacs-lisp-mode-hook
             (lambda()
@@ -132,31 +136,41 @@
 (require 'whitespace)
 (setq whitespace-style '(face empty tabs lines-tail trailing))
 #+END_SRC
-** Diminish
+** Diminish / Minor-mode Display 
   * if you are using spaceline with eyeliner, you don't really need to use diminish
 #+BEGIN_SRC emacs-lisp
-  (require 'diminish)
-  (let (package=string mode-string)
-    (dolist (package-symbol '(auto-revert
-                              beacon which-key
-                              ivy hs-minor whitespace
-                              undo-tree
-                              projectile projectile-rails
-                              flycheck))
-      (setq package-string (symbol-name package-symbol))
-      (setq mode-string (concat package-string "-mode"))
+    (require 'diminish)
+    (let (package-string mode-string)
+      (dolist (package-symbol '(auto-revert
+                                beacon which-key
+                                ivy hs-minor whitespace
+                                highlight-parentheses
+                                undo-tree
+                                projectile projectile-rails
+                                flycheck))
+        (setq package-string (symbol-name package-symbol))
+        (setq mode-string (concat package-string "-mode"))
 
-  ;; XXX: not working
-  ;;    (eval-after-load package-string
-  ;;      `(diminish (quote ,mode-string)))
-  ;; WORKAROUND
-      (add-hook (intern (concat mode-string "-hook"))
-                `(lambda () (diminish (intern ,mode-string))))
-      ))
+    ;; XXX: not working
+    ;;    (eval-after-load package-string
+    ;;      `(diminish (quote ,mode-string)))
+    ;; WORKAROUND
+        (add-hook (intern (concat mode-string "-hook"))
+                  `(lambda () (diminish (intern ,mode-string))))
+        ))
+  ;; use alternative names ...
+    (add-hook 'paredit-mode-hook (lambda () (diminish 'paredit-mode " ⸨P⸩")))
 
-  (setq eldoc-minor-mode-string (if (display-graphic-p) "📚" "Edoc"))
+  ;; but this one working with eval-after-load
+  ;; need to check how use-package deal with this.
+    (eval-after-load 'highlight-indent-guides
+      (lambda () (diminish 'highlight-indent-guides-mode (if (display-graphic-p ) " ⛙" " |{"))))
+
+    (setq eldoc-minor-mode-string (if (display-graphic-p) " 📚" " Ed"))
 #+END_SRC
+
 *** DONE [2020-05-16 Sat] DO NOT REPEAT YOURSELF
+
 * Apperance / Window
 ** Font Install
    (use-package all-the-icons :ensure t :straight t)
@@ -227,6 +241,8 @@
     * Powerline is fancy Doom-modeline looks clean but needs some fonts installed
 
 #+BEGIN_SRC emacs-lisp
+  (defvar work-mode-airline-theme-fallback 'airline-gruvbox-dark)
+
   (let ((setting-modeline? t) (curr-ml work-mode-modeline-preference)
         (fallback-ml work-mode-modeline-fallback) (max-try 10))
     (while (and setting-modeline? (> max-try 0))
@@ -234,11 +250,26 @@
       (catch 'modeline-switch
         (cond
          ((eq curr-ml 'powerline)
-          (use-package powerline :ensure t :straight t)
+          (use-package powerline :ensure t :straight t
+            :config (powerline-default-theme))
+          (setq setting-modeline? nil))
+
+         ((eq curr-ml 'powerline+airline)
+          (require 's)
           (use-package airline-themes
             :ensure t
-            :config (load-theme 'airline-gruvbox-dark t))
-          (setq setting-modeline? nil))
+            :config
+            (progn
+              (let (atheme uts) ;; uts: u ser t heme s ymbol
+                (setq uts work-mode-powerline+airline-theme) ;; copy
+                (if (s-starts-with? "airline-" (symbol-name uts));; FIXME correct?
+                    (setq atheme uts) ;; or
+                  ((setq atheme work-mode-airline-theme-fallback)
+                   (message (concat
+                             "[work-mode] please set correct value of %s: "
+                             "reverting to %s") uts theme)))
+              (load-theme atheme t)
+                (setq setting-modeline? nil)))))
 
          ((eq curr-ml 'doom-modeline)
           (use-package doom-modeline
@@ -247,7 +278,7 @@
             :hook (after-init . doom-modeline-mode))
           (setq setting-modeline? nil))
 
-         ((eq curr-ml 'spaceline)
+         ((eq curr-ml 'spaceline+eyeliner)
           (unless (display-graphic-p)
             (message "your preffered modelines 'spaceline is not working on terminal: going back to: %s" fallback-ml)
             (setq curr-ml fallback-ml)
@@ -266,9 +297,10 @@
                 (eyeliner/install)))
             (setq setting-modeline? nil))))))
 #+END_SRC
-   
+
 *** DONE [2020-05-14 Thu] spaceline not working on terminal -> going back to fallback modeline
-*** TODO Use defcustom for powerline theme (default, airline:(with theme name)) ...
+*** TODO Use defcustom for powerline theme (default, airline:(with theme name))
+*** TODO make a seperate function for loading theme too long lines.
 
 ** Not So MiniBuffer
 #+BEGIN_SRC emacs-lisp
