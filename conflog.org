@@ -3,7 +3,7 @@ Configuration Thougts and Log -*- mode: org -*-
 * Org-Mode
 ** TODO Study more about tagging
    difference??
-** IN-PROGRESS Study more shortcut
+** LEARNING Study more shortcut
 ** DONE memorized
   - C-c C-l: input some link
   - C-c C-o: open link
