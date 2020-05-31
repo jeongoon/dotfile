@@ -1,5 +1,5 @@
 #+TITLE: Emacs Configuration
-#+STARTUP: content nohideblocks
+#+STARTUP: content nohideblocks align
 #+PROPERTY: header-args :comment yes
 
 * Repos
@@ -115,11 +115,6 @@
     :type 'string
     :group 'work-mode)
 #+END_SRC
-*** WAITING Learn More Emacs lisp [0/3]
-    - [ ] What is diffence between #' vs '
-    - [ ] Why we need lambda function when adding to hook?
-    - [ ] What is the meaning of :tag ?
-
 ** Parenthesis
 #+BEGIN_SRC emacs-lisp
 (show-paren-mode 1)
@@ -140,10 +135,26 @@
 ** ParEdit
    :LOGBOOK:
    - Note taken on [2020-05-31 Sun 14:20] \\
-     - shortcuts are moved to shortcuts
+     shortcuts are moved to shortcuts
    :END:
 #+BEGIN_SRC emacs-lisp
   (use-package paredit :ensure t)
+#+END_SRC
+
+** Which-key
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode))
+#+END_SRC
+
+** Tabbar
+#+BEGIN_SRC emacs-lisp
+(use-package tabbar
+  :ensure t
+  :config (progn
+            (tabbar-mode 1)))
 #+END_SRC
 
 ** Miscllaneous
@@ -157,6 +168,10 @@
  (setq whitespace-style '(face empty tabs lines-tail trailing))
  #+END_SRC
 ** Diminish / Minor-mode Display 
+    :LOGBOOK:
+    - Note taken on [2020-05-16 Sat 16:35] \\
+      use dolist for diminishing some modes
+    :END:
    * if you are using spaceline with eyeliner, you don't really need to use diminish
  #+BEGIN_SRC emacs-lisp
      (require 'diminish)
@@ -194,12 +209,12 @@
    ;;  (eval-after-load 'highlight-indent-guides
    ;;    (lambda () (diminish 'highlight-indent-guides-mode (if (display-graphic-p ) " ⛙" "|{"))))
    ;;
-   (setq eldoc-minor-mode-string (if (display-graphic-p) " 📚" " Edoc"))
+   (setq eldoc-minor-mode-string (if (display-graphic-p) " 📚" " Ed"))
 
  #+END_SRC
 *** TODO  make a type list for diminishing.
     - 1. eval-after-load, 2. add-hook, a. change the name
-*** DONE [2020-05-16 Sat] DO NOT REPEAT YOURSELF
+
 * Font 
 ** All-the-icons
 #+BEGIN_SRC emacs-lisp
@@ -289,15 +304,17 @@
     :config (load-theme 'gruvbox t)))
 #+END_SRC
 *** TODO find the better way to move window right hand side (better calcuation based on window size)
-*** TODO check this out [[https://github.com/kuanyui/.emacs.d/blob/master/rc/rc-basic.el#L102]]
-
-*** TODO add function to make fontset by size-pair because fantasque is smaller font than any other unicode fonts
-    I found the match 14 for fantasque 13 for any others.
 **** Ref
      - https://github.com/kuanyui/.emacs.d/blob/master/rc/rc-basic.
      - https://www.gnu.org/software/emacs/manual/html_node/elisp/Sets-And-Lists.html
 
 ** Modeline: Powerline vs Doom-modeline vs Spaceline
+    :LOGBOOK:
+    - Note taken on [2020-05-31 Sun 16:38] \\
+      [2020-05-14 Thu] spaceline not working on terminal -> going back to fallback modeline
+      [2020-05-24 Sun] Use defcustom for powerline theme (default, airline:(with theme name))
+    :END:
+
 *** Desc / Code
     * mode-line, modeline (for search)
     * Powerline is fancy Doom-modeline looks clean but needs some fonts installed
@@ -373,9 +390,8 @@
             (setq setting-modeline? nil))))))
 #+END_SRC
 
-*** DONE [2020-05-14 Thu] spaceline not working on terminal -> going back to fallback modeline
-*** DONE [2020-05-24 Sun] Use defcustom for powerline theme (default, airline:(with theme name))
 *** TODO make a seperate function for loading theme too long lines.
+
 
 ** Not So MiniBuffer
 #+BEGIN_SRC emacs-lisp
@@ -392,8 +408,11 @@
 
   (add-hook 'window-setup-hook (lambda ()
                                  (resize-minibuffer-window t)))
+
+  ;; stil doesn't work when using emacs daemon and visiting a file
+  ;; or with option -t
   (add-hook 'after-change-major-mode-hook (lambda ()
-                                            (resize-minibuffer-window)) nil t)
+                                            (redraw-display) (resize-minibuffer-window)) nil t)
 
   (global-set-key (kbd "C-l") (lambda()
                                 (interactive) ; without this emacs will complain
@@ -425,74 +444,74 @@
 #+BEGIN_SRC emacs-lisp
   (define-key myjin-map "r" 'myjin/revert-buffer-without-confirm)
 #+END_SRC
-** HACKING Quick Access to Buffer or Memo File
+** HACKING Shortcut Table (mainly for file or buffer)
 #+NAME: myjin/shortcuts-list
-  | My Keymap | Key | Binding Type | Link                  | Extra Info | Note                                |
-  |-----------+-----+--------------+-----------------------+------------+-------------------------------------|
-  | t         | m   | file         | ~/proj/.code-memo.org | nil        | nil for no prefix                   |
-  | t         | b   | file         | ~/gtd/inbox.org       | nil        |                                     |
-  | t         | g   | file         | ~/gtd/gtd.org         | nil        |                                     |
-  | t         | i   | file         | myoungjin-init.org    | t          | t for using user-emacs-directory    |
-  | t         | s   | buff         | *scratch*             |            | it looks bold when type **scratch** |
+  | Keymap   | Key         | Binding Type | Link                            | Extra Info | Note                              |
+  |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
+  | t        | m           | file         | ~/proj/.code-memo.org           | nil        | nil for no prefix                 |
+  | t        | b           | file         | ~/gtd/inbox.org                 | nil        |                                   |
+  | t        | g           | file         | ~/gtd/gtd.org                   | nil        |                                   |
+  | t        | i           | file         | myoungjin-init.org              | t          | t for using user-emacs-directory  |
+  | t        | s           | buff         | *scratch*                         |            | it looks bold when type **scratch** |
+  |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
+  | g        | C-c a       | func         | org-agenda                      |            |                                   |
+  |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
+  | t        | p           | func         | paredit-mode                    |            |                                   |
+  | g        | C-c d       | func         | paredit-forward-down            |            |                                   |
+  | g        | C-c s       | func         | paredit-splice-sexp             |            | for terminal compatibility        |
+  | g        | C-c <left>  | func         | paredit-backward-slurp-sexp     |            | ..                                |
+  | g        | C-c <right> | func         | paredit-backward-barf-sexp      |            | ..                                |
+  |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
+  | g        | C-]         | func         | fold-dwin-toggle                |            |                                   |
+  | g        | C-x [       | func         | fold-dwin-hide-all              |            |                                   |
+  | g        | C-x ]       | func         | fold-dwin-show-all              |            |                                   |
+  |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
+  | t        | k           | func         | tabbar-forward                  |            |                                   |
+  | t        | h           | func         | tabbar-backward-group           |            |                                   |
+  | t        | l           | func         | tabbar-forward-group            |            |                                   |
+  |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
+  | g        | C-c c       | func         | org-capture                     |            |                                   |
+  | org-mode | M-n         | func         | org-next-link                   |            |                                   |
+  | org-mode | M-p         | func         | org-previous-link               |            |                                   |
+  | org-mode | C-c m RET   | func         | org-insert-todo-heading         |            |                                   |
+  | org-mode | C-c m \     | func         | org-insert-todo-respect-content |            |                                   |
+
+
 #+BEGIN_SRC emacs-lisp :var shortcuts-data=myjin/shortcuts-list
   (dolist (r shortcuts-data)
     (let (key-after-map binding-type link extra-info)
-      (setq use-my-key-map? (nth 0 r)
+      (setq key-map       (nth 0 r)
             key-after-map (nth 1 r)
             binding-type  (nth 2 r)
             link          (nth 3 r)
             extra-info    (nth 4 r))
 
-      (setq use-my-key-map? (if (string= use-my-key-map? "t") t nil))
+      (cond ((or (string= key-map "") (string= key-map "g"))
+             (setq key-map 'global-map))
+            ((string= key-map "t")
+             (setq key-map 'myjin-map))
+             (t (setq key-map (intern (concat key-map "-map")))))
 
       (cond ((equal binding-type "file")
              (setq extra-info  (if (string= extra-info "t") t nil))
-             (define-key
-               (if use-my-key-map? myjin-map global-map) (kbd key-after-map)
+             (define-key (symbol-value key-map) (kbd key-after-map)
                `(lambda () "open file"
                   (interactive) (myjin/load-file ,link ,extra-info))))
 
             ((equal binding-type "buff")
-             (define-key
-               (if use-my-key-map? myjin-map global-map) (kbd key-after-map)
+             (define-key (symbol-value key-map) (kbd key-after-map)
                `(lambda () "open link"
-                  (interactive) (switch-to-buffer ,link)))))))
+                  (interactive) (switch-to-buffer ,link))))
+
+            ((equal binding-type "func")
+             (define-key (symbol-value key-map) (kbd key-after-map)
+               `(lambda () "call a function"
+                  (interactive) (funcall (intern ,link))))))))
 #+END_SRC
 
    - see the line taged as backquote
    - REF: [[https://emacs.stackexchange.com/questions/7481/how-to-evaluate-the-variables-before-adding-them-to-a-list]]
 
-##+BEGIN_SRC emacs-lisp
-    (defvar myjin/shortcut-list/key-type-prefix-link
-      '(("m"        "file"     nil  "~/proj/.code-memo.org")
-        ("b"        "file"     nil  "~/gtd/inbox.org")
-        ("b"        "file"     nil  "~/gtd/inbox.org")
-        ("i"        "file"     t    "myoungjin-init.org")
-        ("s"        "buff"     nil  "*scratch*"))
-  ;; Doc string
-  "key         type    prefix link
-  type: file | buff
-  prefix: t | nil| path (t: user-emacs-dir;
-    nil:no prefix or no need; path: string to path)" )
-
-    (let (key-after-map link-type link-prefix link-path)
-      (dolist (short-cut-pair ; after key-map named myjin-map
-               myjin/shortcut-list/key-type-prefix-link nil)
-        (setq key-after-map (nth 0 short-cut-pair))
-        (setq link-type     (nth 1 short-cut-pair))
-        (setq link-prefix   (nth 2 short-cut-pair))
-        (setq link-path     (nth 3 short-cut-pair))
-
-        (cond ((equal link-type "file")
-               (define-key myjin-map (kbd key-after-map)
-                 `(lambda () "open file"
-                    (interactive) (myjin/load-file ,link-path ,link-prefix))))
-
-              ((equal link-type "buff")
-               (define-key myjin-map (kbd key-after-map)
-                 `(lambda () "open link"
-                    (interactive) (switch-to-buffer ,link-path)))))))
-##+END_SRC
 *** HACKING make a table for shortcuts and parse them into define-key
 ** Input Method (Korean)
 #+BEGIN_SRC emacs-lisp
@@ -512,13 +531,6 @@
       (add-hook 'prog-mode-hook 'projectile-mode)))
 #+END_SRC
 
-** Which-key
-#+BEGIN_SRC emacs-lisp
-(use-package which-key
-  :ensure t
-  :config
-  (which-key-mode))
-#+END_SRC
 ** Avy-mode
    - [[https://github.com/abo-abo/avy]]
 #+BEGIN_SRC emacs-lisp
@@ -534,54 +546,7 @@
     ; goto-line with that digit already entered."
     (global-set-key (kbd "M-g g") 'avy-goto-line)))
 #+END_SRC
-** Org-mode | Org-Capture
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c c") #'org-capture)
-  (let* ((k)
-         (more-org-key-bindings `((,(kbd "M-n") . org-next-link)
-                                  (,(kbd "M-p") . org-previous-link))))
 
-    ;; default mapping is not working in terminal
-    (nconc more-org-key-bindings
-           `((,(kbd "C-c m RET") .
-              org-insert-todo-heading)
-             (,(kbd "C-c m \\") .
-              org-insert-todo-heading-respect-content)))
-    (dolist (k more-org-key-bindings)
-      (define-key org-mode-map (car k) (cdr k))))
-#+END_SRC
-
-** Fold-dwim
-#+BEGIN_SRC emacs-lisp
-(use-package fold-dwim :ensure t
-  :config (progn
-            (global-set-key (kbd "C-]")     'fold-dwim-toggle)
-            (global-set-key (kbd "C-x [")    'fold-dwim-hide-all)
-            (global-set-key (kbd "C-x ]")    'fold-dwim-show-all) ))
-
-;;(hideshowvis-symbols)
-#+END_SRC
-** Tabbar
-#+BEGIN_SRC emacs-lisp
-(use-package tabbar
-  :ensure t
-  :config (progn
-            (tabbar-mode 1)
-            (define-key myjin-map "j" 'tabbar-backward)
-            (define-key myjin-map "k" 'tabbar-forward)
-            (define-key myjin-map "h" 'tabbar-backward-group)
-            (define-key myjin-map "l" 'tabbar-forward-group)))
-#+END_SRC
-
-** ParEdit
-#+BEGIN_SRC emacs-lisp
-  (define-key myjin-map "p" #'paredit-mode)
-  (global-set-key (kbd "C-c d") #'paredit-forward-down)
-  ;; Some Key binding is not working under my environment (gnome-3, terminal)
-  (global-set-key (kbd "C-c s") #'paredit-splice-sexp)
-  (global-set-key (kbd "C-c <left>") #'paredit-backward-slurp-sexp)
-  (global-set-key (kbd "C-c <right>")  #'paredit-backward-barf-sexp)
-#+END_SRC
 * Work-mode for me
   I don't think that it is good habit to make minor mode is on globally
   so I make an mode to enable some useful stuff
@@ -653,6 +618,12 @@
 #+RESULTS:
 
 * General Programming
+** Fold-dwim
+#+BEGIN_SRC emacs-lisp
+(use-package fold-dwim :ensure t)
+;;(hideshowvis-symbols)
+#+END_SRC
+
 ** Prettify-Symbols-mode
 #+BEGIN_SRC emacs-lisp
   (setq prettify-symbols-alist '(("lambda" . 955)
@@ -751,7 +722,8 @@
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-files '("~/gtd/inbox.org"
                            "~/gtd/gtd.org"
-                           "~/gtd/tickler.org"))
+                           "~/gtd/tickler.org"
+                           "~/.config/emacs/myoungjin-init.org")) ;; or ~/.emacs.d/ ~~~~
 
   (setq org-capture-templates '(("t" "Todo [inbox]" entry
                                  (file+headline "~/gtd/inbox.org" "Tasks")
