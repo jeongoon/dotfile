@@ -115,60 +115,12 @@
     :type 'string
     :group 'work-mode)
 #+END_SRC
-** Parenthesis
-#+BEGIN_SRC emacs-lisp
-(show-paren-mode 1)
-(setq show-paren-style 'parenthesis) ; or expression
-(setq show-paren-delay 0)
-
-(use-package highlight-parentheses :ensure t)
-(use-package rainbow-delimiters
-  :ensure t
-  :config
-  (add-hook 'lisp-mode-hook
-            (lambda()
-              (rainbow-delimiters-mode))))
-
-(global-highlight-parentheses-mode)
-#+END_SRC
-
-** ParEdit
-   :LOGBOOK:
-   - Note taken on [2020-05-31 Sun 14:20] \\
-     shortcuts are moved to shortcuts
-   :END:
-#+BEGIN_SRC emacs-lisp
-  (use-package paredit :ensure t)
-#+END_SRC
-
-** Which-key
-#+BEGIN_SRC emacs-lisp
-(use-package which-key
-  :ensure t
-  :config
-  (which-key-mode))
-#+END_SRC
-
-** Tabbar
-#+BEGIN_SRC emacs-lisp
-(use-package tabbar
-  :ensure t
-  :config (progn
-            (tabbar-mode 1)))
-#+END_SRC
-
-** Miscllaneous
- #+BEGIN_SRC emacs-lisp
- (setq-default major-mode 'text-mode)
- (setq-default indent-tabs-mode nil) ; I prefer not to use indent-tabs-mode
-
- (transient-mark-mode 1)
-
- (require 'whitespace)
- (setq whitespace-style '(face empty tabs lines-tail trailing))
- #+END_SRC
 ** Diminish / Minor-mode Display 
     :LOGBOOK:
+    - Note taken on [2020-05-31 Sun 23:33] \\
+      I guess this part should come first work properly
+      Because I put this one after which-key package and realized that
+      WK (lighter for Which-key) is shown.
     - Note taken on [2020-05-16 Sat 16:35] \\
       use dolist for diminishing some modes
     :END:
@@ -215,6 +167,58 @@
 *** TODO  make a type list for diminishing.
     - 1. eval-after-load, 2. add-hook, a. change the name
 
+** Parenthesis
+#+BEGIN_SRC emacs-lisp
+(show-paren-mode 1)
+(setq show-paren-style 'parenthesis) ; or expression
+(setq show-paren-delay 0)
+
+(use-package highlight-parentheses :ensure t)
+(use-package rainbow-delimiters
+  :ensure t
+  :config
+  (add-hook 'lisp-mode-hook
+            (lambda()
+              (rainbow-delimiters-mode))))
+
+(global-highlight-parentheses-mode)
+#+END_SRC
+
+** ParEdit
+   :LOGBOOK:
+   - Note taken on [2020-05-31 Sun 14:20] \\
+     shortcuts are moved to shortcuts
+   :END:
+#+BEGIN_SRC emacs-lisp
+  (use-package paredit :ensure t)
+#+END_SRC
+
+** Which-key
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode 1))
+#+END_SRC
+
+** Tabbar
+#+BEGIN_SRC emacs-lisp
+(use-package tabbar
+  :ensure t
+  :config (progn
+            (tabbar-mode 1)))
+#+END_SRC
+
+** Miscllaneous
+ #+BEGIN_SRC emacs-lisp
+ (setq-default major-mode 'text-mode)
+ (setq-default indent-tabs-mode nil) ; I prefer not to use indent-tabs-mode
+
+ (transient-mark-mode 1)
+
+ (require 'whitespace)
+ (setq whitespace-style '(face empty tabs lines-tail trailing))
+ #+END_SRC
 * Font 
 ** All-the-icons
 #+BEGIN_SRC emacs-lisp
@@ -234,7 +238,7 @@
    - gruvbox-theme
 
 #+NAME: testing-hangul-alignment-in-table
-| 한글hangul              | 01234오육칠팔구십   | Love사랑Freedom자유  |
+| hangul한글              | 01234오육칠팔구십   | Love사랑Freedom자유  |
 | if you cannot           | line is not aligned | you'd better look at |
 | face-font-rescale-alist | shown below         |                      |
 
@@ -259,6 +263,7 @@
                           "FreeSerif"  ;; GNU Font; has a variety of unicodes
                           "Segoe UI Emoji"
                           ))
+          ;; note : not fantasque_kr but fontset-fantasque_kr
           (set-fontset-font "fontset-fantasque_kr" 'unicode
                             (font-spec :family fmname) nil 'append))
 
@@ -283,6 +288,7 @@
                                         ("file-icons" . 0.75) ;; these are wide
                                         ;; javascript.js rakudo.p6
                                         (,myjin/korean-font-family . 1.1)))
+
         ;; FIXME: find better way to find the width of window
         (setq frame-default-left (- (x-display-pixel-width) 698)) ;; 700 when font size is 14
         (if (< (x-display-pixel-height) 698)
@@ -444,7 +450,7 @@
 #+BEGIN_SRC emacs-lisp
   (define-key myjin-map "r" 'myjin/revert-buffer-without-confirm)
 #+END_SRC
-** HACKING Shortcut Table (mainly for file or buffer)
+** Shortcut Table (mainly for file or buffer)
 #+NAME: myjin/shortcuts-list
   | Keymap   | Key         | Binding Type | Link                            | Extra Info | Note                              |
   |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
@@ -591,7 +597,7 @@
     :version "green")
 
   (defun work-mode ()
-    "turn on some usuful minor mode like display-line-numbers and whitespace"
+    "Turn on some usuful minor mode like display-line-numbers and whitespace"
     (let (work-mode-ready? res on-or-off derived-mode-check-function)
       (setq work-mode-ready? nil)
       (setq derived-mode-check-function
@@ -599,23 +605,25 @@
                 (lambda (candi given-mode) ; candi is actually not used here
                   (derived-mode-p given-mode))
               nil))
+
       (setq res (common-allow-deny-rule-apply major-mode
                                               work-mode-allowed-modes
+                                              work-mode-exempt-modes
                                               derived-mode-check-function))
-      (setq work-mode-ready? (if (eq (car res) 'allowed) t nil))
+      (setq work-mode-ready? (if (equal (car res) 'allowed) t nil))
         ;;(let (status stage)
         ;;  (setq status (car res))
         ;;  (setq stage  (car (cdr res))) ;; not used
         ;;  (setq work-mode-ready? (if (eq status 'allowed) t nil)))
+
       ;; Do real configuration goes here
       (setq on-or-off (if work-mode-ready? 1 0))
       (dolist (mode-name work-mode-enabled-major-mode nil)
+        ;;(message "%s is %s" mode-name on-or-off)
         (funcall mode-name on-or-off))))
 
     (add-hook 'after-change-major-mode-hook 'work-mode)
 #+END_SRC
-
-#+RESULTS:
 
 * General Programming
 ** Fold-dwim
@@ -952,18 +960,10 @@ certain major modes defined in `display-line-numbers-exempt-modes'"
 #+END_SRC
 
 ** All-the-icons-Dired vs treemacs-icons-dired
-** TODO hack treemacs-icons-dired to use all-the-icons aligned.
-
 #+BEGIN_SRC emacs-lisp
   (use-package all-the-icons-dired :ensure t
     :config
     (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
-  ;; (use-package treemacs-icons-dired :ensure t
-  ;;   :config
-  ;;   (progn
-  ;;     (require 'dired)
-  ;;     (if (display-graphic-p)
-  ;;         (add-hook 'dired-mode-hook 'treemacs-icons-dired-mode))))
 #+END_SRC
 
 ** TODO Treemacs

@@ -29,37 +29,39 @@
 ;;
 ;;; Code:
 
-(defun common-allow-deny-rule-apply (candi white-list black-list &optional allow-stage-failed-hook)
+(defun common-allow-deny-rule-apply (candi white-list black-list &rest allow-stage-failed-hook-list)
   "check candidate against white list and black list and return a list of two elements"
-  (let* ((final-status 'denied)
+  (let* ((dmsg_ nil) (final-status 'denied)
          (final-stage  'allow-stage))
-    (if (or (eq white-list t) ; if t then allow all but will check black list again
+    (if (or (eq white-list t) ;; if t then allow all but will check black list again
             (member candi white-list))
-      ; THEN
-        (setq final-stage 'deny-stage) ; ready to goto next stage
-      ; ELSE
-      (if (and allow-stage-failed-hook ; why needed?
-               (listp allow-stage-failed-hook))
-          (progn
-            (message "commoon-allow-deny-rule-apply: go check further with allowed-stage-failed-hook: %s" allow-stage-failed-hook)
-            (let (allowed? curr-hook hook-list res)
-              (setq allowed? nil) ; not yet
-              (setq hook-list allow-stage-failed-hook) ; copy the hook list
-              (if (dolist (allowed-elem white-list allowed?)
-                    (while (and hook-list (not allowed?))
-                      ; FIXME: Better way?
-                      (setq curr-hook (car hook-list))
-                      (setq hook-list (cdr hook-list))
-                      (message "common-allow-deny-rule-apply: (%s %s %s)" curr-hook candi allowed-elem)
-                      (setq res (funcall curr-hook candi allowed-elem))
-                      (message "common-allow-deny-rule-apply: result: %s" res)
-                      (when res
-                        ; if curr-hook return t candi is allowed
-                        (setq allowed? t))))
-                  ; allowed!
-                  (setq final-stage 'deny-stage))))
-            ; denied already without further investigation
-            (setq final-status 'denied)))
+      ;; THEN
+        (setq final-stage 'deny-stage) ;; ready to goto next stage
+      ;; ELSE
+      (progn
+        (when dmsg_ (message "%s" allow-stage-failed-hook-list))
+        (if (and allow-stage-failed-hook-list ;; why needed?
+                 (listp allow-stage-failed-hook-list))
+            (progn
+              (when dmsg_ (message "common-allow-deny-rule-apply: go check further with allowed-stage-failed-hook-list: %s" allow-stage-failed-hook-list))
+              (let (allowed? curr-hook hook-list res)
+                (setq allowed? nil) ; not yet
+                (setq hook-list allow-stage-failed-hook-list) ; copy the hook list?
+                (if (dolist (allowed-elem white-list allowed?)
+                      (while (and hook-list (not allowed?))
+                        ;; FIXME: Better way?
+                        (setq curr-hook (car hook-list))
+                        (setq hook-list (cdr hook-list))
+                        (when dmsg_ (message "common-allow-deny-rule-apply: (%s %s %s)" curr-hook candi allowed-elem))
+                        (setq res (funcall curr-hook candi allowed-elem))
+                        (when dmsg_ (message "common-allow-deny-rule-apply: result: %s" res))
+                        (when res
+                                        ; if curr-hook return t candi is allowed
+                          (setq allowed? t))))
+                                        ; allowed!
+                    (setq final-stage 'deny-stage))))
+                                        ; denied already without further investigation
+          (setq final-status 'denied))))
     ; deny-stage
     (when (eq final-stage 'deny-stage)
       (when (not (member candi black-list))
