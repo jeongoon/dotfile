@@ -41,6 +41,11 @@
  '(org-agenda-files
    (quote
     ("~/gtd/inbox.org" "~/gtd/gtd.org" "~/gtd/tickler.org")))
+ '(org-refile-targets
+   (quote
+    (("~/gtd/gtd.org" :maxlevel . 3)
+     ("~/gtd/someday.org" :level . 1)
+     ("~/gtd/tickler.org" :maxlevel . 2))))
  '(package-selected-packages
    (quote
     (beacon which-key avy tabbar w3m raku-mode fold-dwim-org fold-dwim gruvbox-theme auctex fish-mode counsel ivy auto-complete magit use-package nov flycheck-perl6 cl-lib-highlight cl-generic cl-format airline-themes)))
