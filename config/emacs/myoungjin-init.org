@@ -277,11 +277,13 @@
         ;; HACKING: Still testing on it.
         ;; seems works for icon-dired-mode (file-icons; I guess there is something more
         ;; hangul(한글) in table look at `testing-hangul-alignment-in-table'
-        (setq face-font-rescale-alist `(("Material Icons" . 0.9) ;; ???
-                                        ("FontAwesome" . 0.9)    ;; ???
-                                        ("github-octicons" . 0.9)
+        (setq face-font-rescale-alist `(("Material Icons" . 0.7)
                                         ;; `-> test:
-                                        ;; <any directory>  .vim something.txt~
+                                        ;; <Pictures>
+                                        ("FontAwesome" . 0.9)    ;; ???
+                                        ("github-octicons" . 0.75)
+                                        ;; `-> test:
+                                        ;; <any directory>  .vim something.txt~ README.md
                                         ("all-the-icons" . 0.8)
                                         ;; `-> test:
                                         ;; .bashrc  .gitconfig  perl.pl shell.sh
@@ -468,9 +470,9 @@
   | g        | C-c <left>  | func         | paredit-backward-slurp-sexp     |            | ..                                |
   | g        | C-c <right> | func         | paredit-backward-barf-sexp      |            | ..                                |
   |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
-  | g        | C-]         | func         | fold-dwin-toggle                |            |                                   |
-  | g        | C-x [       | func         | fold-dwin-hide-all              |            |                                   |
-  | g        | C-x ]       | func         | fold-dwin-show-all              |            |                                   |
+  | g        | C-]         | func         | fold-dwim-toggle                |            |                                   |
+  | g        | C-x [       | func         | fold-dwim-hide-all              |            |                                   |
+  | g        | C-x ]       | func         | fold-dwim-show-all              |            |                                   |
   |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
   | t        | k           | func         | tabbar-forward                  |            |                                   |
   | t        | h           | func         | tabbar-backward-group           |            |                                   |
