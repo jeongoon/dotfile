@@ -714,12 +714,12 @@
 #+BEGIN_SRC emacs-lisp
     (setq org-todo-keywords
           '((sequence "TODO(o)" "|" "DONE(e)")
-            ;; For Study
+            ;; For General
             (sequence "TODO(t)" "LEARNING(l)" "HACKING(h)" "WAITING(w)"
                       "|"
                       "DONE(d)" "DELEGATED(g)" "CANCELLED(c)")
-            ;; For life
-            (sequence "✎PLN(p)" "⎘NXT(n)" "♘PRJ(j)" "☕SDY(s)" "|" "☑FIN(f)" "☒ABD(a)")))
+            ;; For Study
+            (sequence "✎(p)" "➤(n)" "♘(j)" "☕(s)" "|" "✔(f)" "✖(a)")))
 #+END_SRC
 ** From Rainer  https://www.youtube.com/channel/UCfbGTpcJyEOMwKP-eYz3_fg
 #+BEGIN_SRC emacs-lisp

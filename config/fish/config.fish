@@ -14,8 +14,10 @@ abbr SS sudo systemctl
 
 #set -x EDITOR /usr/bin/vim # done by ~/.pam_environment
 
-if false
-    set PATH ~/bin/texbin $HOME/perl5/bin ~/bin ~/.rakudo/install/bin ~/.rakudo/install/share/perl6/site/bin $PATH
+for di in bin bin/texbin perl5/bin .rakudo/install/bin .rakudo/install/share/perl6/site/bin .local/share/rakudo/bin .local/share/rakudo/share/perl6/site/bin
+    if test -d $HOME/$di
+        string match -vq $HOME/$di $PATH; and set -x PATH $HOME/$di $PATH
+    end
 end
 
 set BC_ENV_ARGS "-q"
