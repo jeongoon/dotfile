@@ -1,4 +1,4 @@
-#set -g theme_nerd_fonts yes
+set -g theme_nerd_fonts yes # if you set by -g once, don't need to set again.
 set -g theme_color_scheme gruvbox
 set -g fish_color_autosuggestion 999 brblack
 
@@ -30,16 +30,11 @@ if test -d $HOME/perl5
 end
 
 # PERL6LIB use comma(,) as a seporator
-set -x myPerl6 $HOME/proj/myPerl6;
 
-if test -d $myPerl6
-   if echo $PERL6LIB | egrep -q "\b$myPerl6\b"
-       if set -q PERL6LIB
-           set -x PERL6LIB $myperl6,$PERL6LIB
-       else
-           set -x PERL6LIB $myperl6
-       end
-   end
+for di in $HOME/lib $HOME/proj/myPerl6
+    if test -d $di
+        string match -vq $di $PERL6LIB; and set -x PERL6LIB $di $PERL6LIB
+    end
 end
 
 if test -d $HOME/.wine

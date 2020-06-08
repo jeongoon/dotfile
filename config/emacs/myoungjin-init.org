@@ -8,7 +8,7 @@
 #+END_SRC
 
 * Straight.el - package directly from git repo
-  :ThinkAboutIt:
+  :LOGBOOK:
    use every package from straight?
    global ensure mode on use-package vs type everty time :ensure t
   :End:
@@ -84,6 +84,7 @@
                                          :size fontset-size :height 1.0))))
       (user-error "%s is not found in (font-family-list)" fontset-family-ascii)))
 #+END_SRC
+***  TODO better argument handling with `:tag value' sequene
 
 * Global Settings | Custom Values
 #+BEGIN_SRC emacs-lisp
@@ -150,7 +151,7 @@
 
    (add-hook 'paredit-mode-hook
              (lambda () (diminish 'paredit-mode
-                             (if (display-graphic-p) " ⸨✓" " ⸨PEd"))))
+                             (if (display-graphic-p) " ⸨✓" " ⸨PE"))))
 
    (add-hook 'all-the-icons-dired-mode-hook
              (lambda () (diminish 'all-the-icons-dired-mode
@@ -209,7 +210,7 @@
             (tabbar-mode 1)))
 #+END_SRC
 
-** Miscllaneous
+** Miscellaneous
  #+BEGIN_SRC emacs-lisp
  (setq-default major-mode 'text-mode)
  (setq-default indent-tabs-mode nil) ; I prefer not to use indent-tabs-mode
@@ -226,6 +227,7 @@
 #+END_SRC
 ** Unicode site
     [[https://unicode-table.com/]]
+    ①②③④⑤⑦⑧⑨
 ** TODO : how to inform the user to install fonts via
 
     =M-x all-the-icons-install-fonts= ???
@@ -400,7 +402,6 @@
 
 *** TODO make a seperate function for loading theme too long lines.
 
-
 ** Not So MiniBuffer
 #+BEGIN_SRC emacs-lisp
   (setq resize-mini-windows nil) ;; set nil to keep size after resizing minibuffer
@@ -452,7 +453,7 @@
 #+BEGIN_SRC emacs-lisp
   (define-key myjin-map "r" 'myjin/revert-buffer-without-confirm)
 #+END_SRC
-** Shortcut Table (mainly for file or buffer)
+** Shortcuts Table (mainly for file or buffer)
 #+NAME: myjin/shortcuts-list
   | Keymap   | Key         | Binding Type | Link                            | Extra Info | Note                              |
   |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
@@ -461,8 +462,6 @@
   | t        | g           | file         | ~/gtd/gtd.org                   | nil        |                                   |
   | t        | i           | file         | myoungjin-init.org              | t          | t for using user-emacs-directory  |
   | t        | s           | buff         | *scratch*                         |            | it looks bold when type **scratch** |
-  |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
-  | g        | C-c a       | func         | org-agenda                      |            |                                   |
   |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
   | t        | p           | func         | paredit-mode                    |            |                                   |
   | g        | C-c d       | func         | paredit-forward-down            |            |                                   |
@@ -474,16 +473,17 @@
   | g        | C-x [       | func         | fold-dwim-hide-all              |            |                                   |
   | g        | C-x ]       | func         | fold-dwim-show-all              |            |                                   |
   |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
+  | t        | j           | fun          | tabber-backward                 |            |                                   |
   | t        | k           | func         | tabbar-forward                  |            |                                   |
   | t        | h           | func         | tabbar-backward-group           |            |                                   |
   | t        | l           | func         | tabbar-forward-group            |            |                                   |
   |----------+-------------+--------------+---------------------------------+------------+-----------------------------------|
+  | g        | C-c a       | func         | org-agenda                      |            |                                   |
   | g        | C-c c       | func         | org-capture                     |            |                                   |
   | org-mode | M-n         | func         | org-next-link                   |            |                                   |
   | org-mode | M-p         | func         | org-previous-link               |            |                                   |
   | org-mode | C-c m RET   | func         | org-insert-todo-heading         |            |                                   |
   | org-mode | C-c m \     | func         | org-insert-todo-respect-content |            |                                   |
-
 
 #+BEGIN_SRC emacs-lisp :var shortcuts-data=myjin/shortcuts-list
   (dolist (r shortcuts-data)
@@ -714,10 +714,12 @@
 #+BEGIN_SRC emacs-lisp
     (setq org-todo-keywords
           '((sequence "TODO(o)" "|" "DONE(e)")
+            ;; For Study
             (sequence "TODO(t)" "LEARNING(l)" "HACKING(h)" "WAITING(w)"
                       "|"
                       "DONE(d)" "DELEGATED(g)" "CANCELLED(c)")
-            (sequence "PLAN(p)" "NEXT(n)" "PROJ(j)" "SOMEDAY(s)" "|" "FINISHED(f)")))
+            ;; For life
+            (sequence "✎PLN(p)" "⎘NXT(n)" "♘PRJ(j)" "☕SDY(s)" "|" "☑FIN(f)" "☒ABD(a)")))
 #+END_SRC
 ** From Rainer  https://www.youtube.com/channel/UCfbGTpcJyEOMwKP-eYz3_fg
 #+BEGIN_SRC emacs-lisp
