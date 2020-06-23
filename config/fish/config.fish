@@ -14,9 +14,9 @@ abbr SS sudo systemctl
 
 #set -x EDITOR /usr/bin/vim # done by ~/.pam_environment
 
-for di in bin bin/texbin perl5/bin .rakudo/install/bin .rakudo/install/share/perl6/site/bin .local/share/rakudo/bin .local/share/rakudo/share/perl6/site/bin
+for di in bin sbin bin/texbin perl5/bin .rakudo/install/bin .rakudo/install/share/perl6/site/bin .local/share/rakudo/bin .local/share/rakudo/share/perl6/site/bin
     if test -d $HOME/$di
-        string match -vq $HOME/$di $PATH; and set -x PATH $HOME/$di $PATH
+        string match -vq $HOME/$di "$PATH"; and set -x PATH $HOME/$di $PATH
     end
 end
 
@@ -35,7 +35,11 @@ end
 
 for di in $HOME/lib $HOME/proj/myPerl6
     if test -d $di
-        string match -vq $di $PERL6LIB; and set -x PERL6LIB $di $PERL6LIB
+        if string match "" "$PERL6LIB"
+            set -x PERL6LIB $di
+        else
+            string match -vq $di "$PERL6LIB"; and set -x PERL6LIB $di,$PERL6LIB
+        end
     end
 end
 

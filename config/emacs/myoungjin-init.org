@@ -159,7 +159,7 @@
 
    (add-hook 'all-the-icons-dired-mode-hook
              (lambda () (diminish 'all-the-icons-dired-mode
-                             (if (display-graphic-p) " 📁" " i-dired"))))
+                             (if (display-graphic-p) " 📁" " iDired"))))
 
    ;; but this one works with `eval-after-load'
    ;; need to check how use-package deal with this.
@@ -232,7 +232,7 @@
 ** Unicode site
     [[https://unicode-table.com/]]
     ①②③④⑤⑦⑧⑨
-** TODO : how to inform the user to install fonts via
+** ☕ : how to inform the user to install fonts via
 
     =M-x all-the-icons-install-fonts= ???
 * Apperance / Window
@@ -290,7 +290,7 @@
                                         ("github-octicons" . 0.8)
                                         ;; `-> test:
                                         ;; <any directory>  .vim something.txt~ README.md
-                                        ("all-the-icons" . 0.9)
+                                        ("all-the-icons" . 0.8)
                                         ;; `-> test:
                                         ;; .bashrc  .gitconfig  perl.pl shell.sh
                                         ("file-icons" . 0.85) ;; these are wide
@@ -412,7 +412,6 @@
            (minibuffer-new-height 7)
            (delta (- minibuffer-new-height minibuffer-orig-height))
            )
-
       (window-resize (minibuffer-window) delta)
       (when greeting-message (message "Have a nice one. ;^]"))))
 
@@ -422,6 +421,7 @@
   ;; stil doesn't work when using emacs daemon and visiting a file
   ;; or with option -t
   (add-hook 'after-change-major-mode-hook (lambda ()
+  ;;(add-hook 'focus-in-hook (lambda ()
                                             (redraw-display) (resize-minibuffer-window)) nil t)
 
   (global-set-key (kbd "C-l") (lambda()
@@ -456,35 +456,35 @@
 #+END_SRC
 ** Shortcuts Table (mainly for file or buffer)
 #+NAME: myjin/shortcuts-list
-  | Keymap   | Key         | Binding Type | Link                                    | Extra Info | Note                              |
-  |----------+-------------+--------------+-----------------------------------------+------------+-----------------------------------|
-  | t        | m           | file         | ~/proj/.code-memo.org                   | nil        | nil for no prefix                 |
-  | t        | b           | file         | ~/gtd/inbox.org                         | nil        |                                   |
-  | t        | g           | file         | ~/gtd/gtd.org                           | nil        |                                   |
-  | t        | i           | file         | myoungjin-init.org                      | t          | t for using user-emacs-directory  |
-  | t        | s           | buff         | *scratch*                                 |            | it looks bold when type **scratch** |
-  |----------+-------------+--------------+-----------------------------------------+------------+-----------------------------------|
-  | t        | p           | toggle       | paredit-mode                            |            | toggle mode                       |
-  | g        | C-c d       | func         | paredit-forward-down                    |            |                                   |
-  | g        | C-c s       | func         | paredit-splice-sexp                     |            | for terminal compatibility        |
-  | g        | C-c <left>  | func         | paredit-backward-slurp-sexp             |            | ..                                |
-  | g        | C-c <right> | func         | paredit-backward-barf-sexp              |            | ..                                |
-  |----------+-------------+--------------+-----------------------------------------+------------+-----------------------------------|
-  | g        | C-]         | func         | fold-dwim-toggle                        |            |                                   |
-  | g        | C-x [       | func         | fold-dwim-hide-all                      |            |                                   |
-  | g        | C-x ]       | func         | fold-dwim-show-all                      |            |                                   |
-  |----------+-------------+--------------+-----------------------------------------+------------+-----------------------------------|
-  | t        | j           | func         | tabber-backward                         |            |                                   |
-  | t        | k           | func         | tabbar-forward                          |            |                                   |
-  | t        | h           | func         | tabbar-backward-group                   |            |                                   |
-  | t        | l           | func         | tabbar-forward-group                    |            |                                   |
-  |----------+-------------+--------------+-----------------------------------------+------------+-----------------------------------|
-  | g        | C-c a       | func         | org-agenda                              |            |                                   |
-  | g        | C-c c       | func         | org-capture                             |            |                                   |
-  | org-mode | M-n         | func         | org-next-link                           |            |                                   |
-  | org-mode | M-p         | func         | org-previous-link                       |            |                                   |
-  | org-mode | C-c m RET   | func         | myjin/org-insert-todo-heading           |            |  WORKAROUND                       |
-  | org-mode | C-c m \     | func         | org-insert-todo-heading-respect-content |            |                                   |
+  | Keymap   | Key         | Binding Type | Link                                    | Extra Info | Note                                |
+  |----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
+  | t        | m           | file         | ~/proj/.code-memo.org                   | nil        | nil for no prefix                   |
+  | t        | b           | file         | ~/gtd/inbox.org                         | nil        |                                     |
+  | t        | g           | file         | ~/gtd/gtd.org                           | nil        |                                     |
+  | t        | i           | file         | myoungjin-init.org                      | t          | t for using user-emacs-directory    |
+  | t        | s           | buff         | *scratch*                               |            | it looks bold when type **scratch** |
+  |----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
+  | t        | p           | toggle       | paredit-mode                            |            | toggle mode                         |
+  | g        | C-c d       | func         | paredit-forward-down                    |            |                                     |
+  | g        | C-c s       | func         | paredit-splice-sexp                     |            | for terminal compatibility          |
+  | g        | C-c <left>  | func         | paredit-backward-slurp-sexp             |            | ..                                  |
+  | g        | C-c <right> | func         | paredit-backward-barf-sexp              |            | ..                                  |
+  |----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
+  | g        | C-]         | func         | fold-dwim-toggle                        |            |                                     |
+  | g        | C-x [       | func         | fold-dwim-hide-all                      |            |                                     |
+  | g        | C-x ]       | func         | fold-dwim-show-all                      |            |                                     |
+  |----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
+  | t        | j           | func         | tabbar-backward                         |            |                                     |
+  | t        | k           | func         | tabbar-forward                          |            |                                     |
+  | t        | h           | func         | tabbar-backward-group                   |            |                                     |
+  | t        | l           | func         | tabbar-forward-group                    |            |                                     |
+  |----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
+  | g        | C-c a       | func         | org-agenda                              |            |                                     |
+  | g        | C-c c       | func         | org-capture                             |            |                                     |
+  | org-mode | M-n         | func         | org-next-link                           |            |                                     |
+  | org-mode | M-p         | func         | org-previous-link                       |            |                                     |
+  | org-mode | C-c m RET   | func         | myjin/org-insert-todo-heading           |            | WORKAROUND                          |
+  | org-mode | C-c m \     | func         | org-insert-todo-heading-respect-content |            |                                     |
 
 #+BEGIN_SRC emacs-lisp :var shortcuts-data=myjin/shortcuts-list
       (dolist (r shortcuts-data)
@@ -505,7 +505,9 @@
                  (setq extra-info  (if (string= extra-info "t") t nil))
                  (define-key (symbol-value key-map) (kbd key-after-map)
                    `(lambda () "open a file"
-                      (interactive) (myjin/load-file ,link ,extra-info))))
+                      (interactive)
+                      (require 'which-key)
+                      (myjin/load-file ,link ,extra-info))))
 
                 ((equal binding-type "buff")
                  (define-key (symbol-value key-map) (kbd key-after-map)
@@ -527,13 +529,10 @@
                       (interactive) (funcall (intern ,link))))))))
 #+END_SRC
 
-#+RESULTS:
-
    - see the line taged as backquote
    - REF: [[https://emacs.stackexchange.com/questions/7481/how-to-evaluate-the-variables-before-adding-them-to-a-list]]
 
 *** HACKING make a table for shortcuts and parse them into define-key
-*** TODO make some toggle function for paredit-mode and binding it.
 *** TODO general key binding?? https://sam217pa.github.io/2016/09/02/how-to-build-your-own-spacemacs/
 ** Input Method (Korean)
 #+BEGIN_SRC emacs-lisp
@@ -650,12 +649,41 @@
 
 ** Prettify-Symbols-mode
 #+BEGIN_SRC emacs-lisp
-  (setq prettify-symbols-alist '(("lambda" . 955)
-                                 ("->" . 8594)    ; →
-                                 ("=>" . 8658)    ; ⇒
-                                 ("map" . 8614)   ; ↦
-                                 ))
+  (add-hook
+   'raku-mode-hook
+   (lambda()
+     (mapc (lambda (pair) (push pair prettify-symbols-alist))
+           '(("->" . 8594)    ; →
+             ("=>" . 8658)    ; ⇒
+             ("~~" . #x2248)    ; ≈
+             ("sub" . #x1d4e2 ) ; 𝓢
+;;             ("return" . #x2b6e) ; ⭮
+             ("return" . #x2234) ; ∴
+             ("-->" . #x27fc) ; ⟼
+             ("returns" . #x27fc) ; ⟼
+
+             ("my" . #x1d7b5 ) ; 𝞵
+             ("our" . #x1d79e ) ; 𝞞
+
+             ("for" .  #x2200) ; ∀
+             ("last" . #x21f2) ; ⇲
+             ("next" . #x21f1) ; ⇱
+             ("proceed" . #x2346 ) ; ⍆
+
+             ("and" . #x2227 ) ; ∧
+             ("or"  . #x2228 ) ; ∨
+             ("not" . #xac   ) ; ¬
+
+             ("Nil" .  #x2205) ; ∅
+             ("True" . #x1d54B) ; 𝕋
+             ("False" . #x1d53d) ; 𝔽
+             ("contains" . #x220b) ; ∋
+             ("??" . #x2047 ) ; ⁇
+             ("!!" . #x203c ) ; ‼
+             ))))
 #+END_SRC
+
+*** ✎    check this out: https://www.modernemacs.com/post/prettify-mode/
 
 ** Highlight Indent Guides
 #+BEGIN_SRC emacs-lisp
@@ -663,6 +691,7 @@
     :ensure t
 ;    :hook ((prog-mode text-mode conf-mode) . highlight-indent-guides-mode)
     :init
+
     (setq highlight-indent-guides-method 'character)
     :config
     (add-hook 'focus-in-hook #'highlight-indent-guides-auto-set-faces)
@@ -720,9 +749,8 @@
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'org-structure-template-alist '("SE" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
 #+END_SRC
-** Todo Setting
 #+BEGIN_SRC emacs-lisp
-  (setq org-log-readline 'note)
+
 #+END_SRC
 ** Todo Keywords
 #+BEGIN_SRC emacs-lisp
@@ -733,13 +761,24 @@
                       "|"
                       "DONE(d)" "DELEGATED(g)" "CANCELLED(c)")
             ;; For Study
-            (sequence "✎(p)" "➤(n)" "♘(j)" "☕(s)" "|" "✔(f)" "✖(a)")))
+            (sequence "✎(p)" "➤(n)" "♘(j)" "☕(s@)" "|" "✔(f@)" "✖(a@)")))
 #+END_SRC
-** From Rainer  https://www.youtube.com/channel/UCfbGTpcJyEOMwKP-eYz3_fg
+** Todo Settings
+***  https://www.youtube.com/channel/UCfbGTpcJyEOMwKP-eYz3_fg        :rainer:
+ #+BEGIN_SRC emacs-lisp
+ ;; https://www.youtube.com/watch?v=nUvdddKZQzs
+  (setq org-log-into-drawer t)
+  ;; https://www.youtube.com/watch?v=R4QSTDco_w8
+  (setq org-log-done 'note)
+  (setq org-log-reschedule 'note)
+ #+END_SRC
+
+*** and more ...
 #+BEGIN_SRC emacs-lisp
-;; https://www.youtube.com/watch?v=nUvdddKZQzs
-(setq org-log-into-drawer t)
+  ;; information to record when the deadline date of a tasks is modified.
+  (setq org-log-redeadline 'note)
 #+END_SRC
+
 ** Archive Setting
 #+BEGIN_SRC emacs-lisp
 (setq org-archive-location "~/gtd/gtd.archive.org::datetree/* Finished from %s")
@@ -830,7 +869,7 @@
 
 #+END_SRC
 **** DONE make some vertical align to use Segoe UI Emoji Font: replaced with Symbola
-*** TESTING
+*** HACKING TESTING
 #+BEGIN_SRC emacs-lisp
   (setq org-link-frame-setup
         (quote
@@ -908,8 +947,8 @@ certain major modes defined in `display-line-numbers-exempt-modes'"
 #+END_SRC
 ** More language modes
 #+BEGIN_SRC emacs-lisp
-(use-package raku-mode :ensure t :defer t)
-(use-package fish-mode :ensure t :defer t)
+  (use-package raku-mode :ensure t :defer t)
+  (use-package fish-mode :ensure t :defer t)
 #+END_SRC
 ** Flycheck
 #+BEGIN_SRC emacs-lisp

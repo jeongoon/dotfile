@@ -37,6 +37,7 @@
  '(custom-safe-themes
    (quote
     ("8d5f22f7dfd3b2e4fc2f2da46ee71065a9474d0ac726b98f647bc3c7e39f2819" "e61752b5a3af12be08e99d076aedadd76052137560b7e684a8be2f8d2958edc3" "ae65ccecdcc9eb29ec29172e1bfb6cadbe68108e1c0334f3ae52414097c501d2" "2f26d251e2b0d11e0a5f16b21785ab42192374259cfe41eed67262869c1b387f" default)))
+ '(global-prettify-symbols-mode t)
  '(iswitchb-mode (quote on))
  '(org-agenda-files
    (quote
