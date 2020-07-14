@@ -401,7 +401,7 @@
             (setq setting-modeline? nil))))))
 #+END_SRC
 
-*** ☕ make a seperate function for loading theme too long lines.
+*** ☕ make a seperate function for loading theme: too long lines.
 
 ** Not So MiniBuffer
 #+BEGIN_SRC emacs-lisp
@@ -444,6 +444,97 @@
 
 #+END_SRC
 
+* Programming, Editing
+** Saveplace
+   automatically save last edit place
+#+BEGIN_SRC emacs-lisp
+  (require 'saveplace)
+  (setq save-place-file "~/.config/emacs/places")
+  (setq save-place-forget-unreadable-files nil)
+  (save-place-mode 1)
+#+END_SRC
+
+** Display line numbers
+#+BEGIN_SRC emacs-lisp
+(require 'display-line-numbers)
+(setq display-line-numbers t)
+(setq display-line-numbers-type t) ; setting display-line-numbers isn't enough
+
+(setq display-line-numbers-current-absoulte t)
+
+(defcustom display-line-numbers-allowed-on-starred-buffers 'nil
+  "Disable buffers that have stars in them like *Gnu Emacs*"
+  :type 'boolean
+  :group 'display-line-numbers)
+
+(defun display-line-numbers--turn-on ()
+  "turn on line numbers in `display-line-numbers-allowed-modes' but excluding
+certain major modes defined in `display-line-numbers-exempt-modes'"
+  (if (or display-line-numbers-allowed-on-starred-buffers
+          (not string-match "*" (buffer-name)))
+      (display-line-numbers-mode 1)
+    (display-line-numbers-mode 0)))
+#+END_SRC
+** More language modes
+#+BEGIN_SRC emacs-lisp
+  (use-package raku-mode :ensure t :defer t)
+  (use-package fish-mode :ensure t :defer t)
+  (use-package rust-mode :ensure t)
+#+END_SRC
+** Flycheck
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :ensure t
+  :defer t
+  :init (add-hook 'prog-mode-hook 'flycheck-mode))
+
+(use-package flycheck-perl6 :ensure t)
+#+END_SRC
+** Auto-complete
+#+BEGIN_SRC emacs-lisp
+;; https://cestlaz.github.io/posts/using-emacs-8-autocomplete/
+(use-package auto-complete
+  :ensure t
+  :init
+  (progn
+    (ac-config-default)
+    (global-auto-complete-mode t) ))
+
+(add-to-list 'ac-modes 'raku-mode)
+#+END_SRC
+** Swiper / Counsel
+   - [[https://cestlaz.github.io/posts/using-emacs-6-swiper/]]
+#+BEGIN_SRC emacs-lisp
+(use-package counsel :ensure t )
+
+(use-package swiper
+  :ensure try
+  :config
+  (progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-height 7)
+    (setq ivy-fixed-height-minibuffer nil)
+    (global-set-key "\C-s" 'swiper)
+    (global-set-key (kbd "C-c C-r") 'ivy-resume)
+    (global-set-key (kbd "<f6>") 'ivy-resume)
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+    (global-set-key (kbd "<f1> l") 'counsel-load-library)
+    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+    (global-set-key (kbd "C-c g") 'counsel-git)
+    (global-set-key (kbd "C-c j") 'counsel-git-grep)
+    (global-set-key (kbd "C-c k") 'counsel-ag)
+    (global-set-key (kbd "C-x l") 'counsel-locate)
+    (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+    ))
+#+END_SRC
+
+
 * Keyboard / Cursor / Shortcuts
 ** My Own Key maps
 #+BEGIN_SRC emacs-lisp
@@ -456,35 +547,38 @@
 #+END_SRC
 ** Shortcuts Table (mainly for file or buffer)
 #+NAME: myjin/shortcuts-list
-  | Keymap   | Key         | Binding Type | Link                                    | Extra Info | Note                                |
-  |----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
-  | t        | m           | file         | ~/proj/.code-memo.org                   | nil        | nil for no prefix                   |
-  | t        | b           | file         | ~/gtd/inbox.org                         | nil        |                                     |
-  | t        | g           | file         | ~/gtd/gtd.org                           | nil        |                                     |
-  | t        | i           | file         | myoungjin-init.org                      | t          | t for using user-emacs-directory    |
-  | t        | s           | buff         | *scratch*                               |            | it looks bold when type **scratch** |
-  |----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
-  | t        | p           | toggle       | paredit-mode                            |            | toggle mode                         |
-  | g        | C-c d       | func         | paredit-forward-down                    |            |                                     |
-  | g        | C-c s       | func         | paredit-splice-sexp                     |            | for terminal compatibility          |
-  | g        | C-c <left>  | func         | paredit-backward-slurp-sexp             |            | ..                                  |
-  | g        | C-c <right> | func         | paredit-backward-barf-sexp              |            | ..                                  |
-  |----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
-  | g        | C-]         | func         | fold-dwim-toggle                        |            |                                     |
-  | g        | C-x [       | func         | fold-dwim-hide-all                      |            |                                     |
-  | g        | C-x ]       | func         | fold-dwim-show-all                      |            |                                     |
-  |----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
-  | t        | j           | func         | tabbar-backward                         |            |                                     |
-  | t        | k           | func         | tabbar-forward                          |            |                                     |
-  | t        | h           | func         | tabbar-backward-group                   |            |                                     |
-  | t        | l           | func         | tabbar-forward-group                    |            |                                     |
-  |----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
-  | g        | C-c a       | func         | org-agenda                              |            |                                     |
-  | g        | C-c c       | func         | org-capture                             |            |                                     |
-  | org-mode | M-n         | func         | org-next-link                           |            |                                     |
-  | org-mode | M-p         | func         | org-previous-link                       |            |                                     |
-  | org-mode | C-c m RET   | func         | myjin/org-insert-todo-heading           |            | WORKAROUND                          |
-  | org-mode | C-c m \     | func         | org-insert-todo-heading-respect-content |            |                                     |
+  | Keymap    | Key         | Binding Type | Link                                    | Extra Info | Note                                |
+  |-----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
+  | t         | m           | file         | ~/proj/.code-memo.org                   | nil        | nil for no prefix                   |
+  | t         | b           | file         | ~/gtd/inbox.org                         | nil        |                                     |
+  | t         | g           | file         | ~/gtd/gtd.org                           | nil        |                                     |
+  | t         | i           | file         | myoungjin-init.org                      | t          | t for using user-emacs-directory    |
+  | t         | s           | buff         | *scratch*                               | nil        | it looks bold when type **scratch** |
+  | t         | e           | file         | ~/gtd/english.org                       | nil        |                                     |
+  |-----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
+  | t         | p           | toggle       | paredit-mode                            |            | toggle mode                         |
+  | g         | C-c d       | func         | paredit-forward-down                    |            |                                     |
+  | g         | C-c s       | func         | paredit-splice-sexp                     |            | for terminal compatibility          |
+  | g         | C-c <left>  | func         | paredit-backward-slurp-sexp             |            | ..                                  |
+  | g         | C-c <right> | func         | paredit-backward-barf-sexp              |            | ..                                  |
+  |-----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
+  | g         | C-]         | func         | fold-dwim-toggle                        |            |                                     |
+  | g         | C-x [       | func         | fold-dwim-hide-all                      |            |                                     |
+  | g         | C-x ]       | func         | fold-dwim-show-all                      |            |                                     |
+  |-----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
+  | t         | j           | func         | tabbar-backward                         |            |                                     |
+  | t         | k           | func         | tabbar-forward                          |            |                                     |
+  | t         | h           | func         | tabbar-backward-group                   |            |                                     |
+  | t         | l           | func         | tabbar-forward-group                    |            |                                     |
+  |-----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
+  | g         | C-c a       | func         | org-agenda                              |            |                                     |
+  | g         | C-c c       | func         | org-capture                             |            |                                     |
+  | org-mode  | M-n         | func         | org-next-link                           |            |                                     |
+  | org-mode  | M-p         | func         | org-previous-link                       |            |                                     |
+  | org-mode  | C-c m RET   | func         | myjin/org-insert-todo-heading           |            | WORKAROUND                          |
+  | org-mode  | C-c m \     | func         | org-insert-todo-heading-respect-content |            |                                     |
+  | rust-mode | C-c C-c     | func         | rust-run                                |            |                                     |
+
 
 #+BEGIN_SRC emacs-lisp :var shortcuts-data=myjin/shortcuts-list
       (dolist (r shortcuts-data)
@@ -499,7 +593,7 @@
                  (setq key-map 'global-map))
                 ((string= key-map "t")
                  (setq key-map 'myjin-map))
-                 (t (setq key-map (intern (concat key-map "-map")))))
+                  (t (setq key-map (intern (concat key-map "-map")))))
 
           (cond ((equal binding-type "file")
                  (setq extra-info  (if (string= extra-info "t") t nil))
@@ -649,38 +743,70 @@
 
 ** Prettify-Symbols-mode
 #+BEGIN_SRC emacs-lisp
-  (add-hook
-   'raku-mode-hook
-   (lambda()
-     (mapc (lambda (pair) (push pair prettify-symbols-alist))
-           '(("->" . 8594)    ; →
-             ("=>" . 8658)    ; ⇒
-             ("~~" . #x2248)    ; ≈
-             ("sub" . #x1d4e2 ) ; 𝓢
-;;             ("return" . #x2b6e) ; ⭮
-             ("return" . #x2234) ; ∴
-             ("-->" . #x27fc) ; ⟼
-             ("returns" . #x27fc) ; ⟼
+  (if (display-graphic-p)
+      (add-hook
+       'raku-mode-hook
+       (lambda()
+         (mapc (lambda (pair) (push pair prettify-symbols-alist))
+               '(("->"       . 8594)      ; →
+                 ("=>"       . 8658)      ; ⇒
+                 ("~~"       . #x2248)    ; ≈
+                 ("eq"       . #xff1d)    ; ＝
+                 ("le"       . #x2266)    ; ≦
+                 ("ge"       . #x2267)    ; ≧
+                 ("gt"       . #xff1e)    ; ＞
+                 ("lt"       . #xff1c)    ; ＜
+                 ("==="      . #x2a76)    ; ⩶
 
-             ("my" . #x1d7b5 ) ; 𝞵
-             ("our" . #x1d79e ) ; 𝞞
+                 ("return"   . #x2b6e)   ; ⭮
+                 ("-->"      . #x27fc)   ; ⟼
+                 ("returns"  . #x27fc)   ; ⟼
 
-             ("for" .  #x2200) ; ∀
-             ("last" . #x21f2) ; ⇲
-             ("next" . #x21f1) ; ⇱
-             ("proceed" . #x2346 ) ; ⍆
+                 ("say"      . #x1f3a4)   ; 🎤
+                 ("print"    . #x2399)    ; ⎙
 
-             ("and" . #x2227 ) ; ∧
-             ("or"  . #x2228 ) ; ∨
-             ("not" . #xac   ) ; ¬
+                 ("use"      . #x271b)    ; ✛
+                 ("sub"      . #x2658)    ; ♘;;  ("sub" . #x1d4e2) ; 𝓢
+                 ("my"       . #x1d707 )  ; 𝜇
+                 ("our"      . #x2127 )   ; ℧
+                 ("with"     . #x293a)    ; ⤺
 
-             ("Nil" .  #x2205) ; ∅
-             ("True" . #x1d54B) ; 𝕋
-             ("False" . #x1d53d) ; 𝔽
-             ("contains" . #x220b) ; ∋
-             ("??" . #x2047 ) ; ⁇
-             ("!!" . #x203c ) ; ‼
-             ))))
+                 ("Any"      . #x1f914)   ; 🤔
+                 ("List"     . #x24c1)    ; Ⓛ
+                 ("Array"    . #x24b6)    ; Ⓐ
+                 ("Str"      . #x24c8)    ; Ⓢ
+                 ("Bool"     . #x24b7)    ; Ⓑ
+
+                 ("class"    . #x2656)    ; ♖
+                 ("self"     . #x1f60a)   ; 😊
+                 ("method"   . #x2657)    ; ♗
+
+                 ;;             ("for" .  #x2200) ; ∀
+
+                 ("for"      . #x267a)    ; ♺
+                 ("if"       . #x26b3)    ; ⚳
+                 ("elsif"    . #x1fbc4)   ; 🯄
+                 ("else"     . #x2325)    ; ⌥
+                 ("last"     . #x21f2)    ; ⇲
+                 ("next"     . #x21f1)    ; ⇱
+                 ("proceed"  . #x2346)    ; ⍆
+                 ("when"     . #x2646)    ; ♆
+                 ("given"    . #x2bd5)    ; ⯕
+                 ("default"  . #x1f3c1)   ; 🏁
+
+                 ("and"      . #x2227 )   ; ∧
+                 ("or"       . #x2228 )   ; ∨
+                 ("not"      . #xac   )   ; ¬
+
+                 ("Nil"      .  #x2205)   ; ∅
+                 ("True"     . #x1d54B)   ; 𝕋
+                 ("False"    . #x1d53d)   ; 𝔽
+                 ("contains" . #x220b)    ; ∋
+
+                 ("??" . #x2047) ; ⁇
+                 ("!!" . #x203c) ; ‼
+                 ("||" . #x2016) ; ‖
+                 )))))
 #+END_SRC
 
 *** ✎    check this out: https://www.modernemacs.com/post/prettify-mode/
@@ -914,94 +1040,6 @@
 ******* check level 7
 ******** check level 8
 
-* Programming, Editing
-** Saveplace
-   automatically save last edit place
-#+BEGIN_SRC emacs-lisp
-  (require 'saveplace)
-  (setq save-place-file "~/.config/emacs/places")
-  (setq save-place-forget-unreadable-files nil)
-  (save-place-mode 1)
-#+END_SRC
-
-** Display line numbers
-#+BEGIN_SRC emacs-lisp
-(require 'display-line-numbers)
-(setq display-line-numbers t)
-(setq display-line-numbers-type t) ; setting display-line-numbers isn't enough
-
-(setq display-line-numbers-current-absoulte t)
-
-(defcustom display-line-numbers-allowed-on-starred-buffers 'nil
-  "Disable buffers that have stars in them like *Gnu Emacs*"
-  :type 'boolean
-  :group 'display-line-numbers)
-
-(defun display-line-numbers--turn-on ()
-  "turn on line numbers in `display-line-numbers-allowed-modes' but excluding
-certain major modes defined in `display-line-numbers-exempt-modes'"
-  (if (or display-line-numbers-allowed-on-starred-buffers
-          (not string-match "*" (buffer-name)))
-      (display-line-numbers-mode 1)
-    (display-line-numbers-mode 0)))
-#+END_SRC
-** More language modes
-#+BEGIN_SRC emacs-lisp
-  (use-package raku-mode :ensure t :defer t)
-  (use-package fish-mode :ensure t :defer t)
-#+END_SRC
-** Flycheck
-#+BEGIN_SRC emacs-lisp
-(use-package flycheck
-  :ensure t
-  :defer t
-  :init (add-hook 'prog-mode-hook 'flycheck-mode))
-
-(use-package flycheck-perl6 :ensure t)
-#+END_SRC
-** Auto-complete
-#+BEGIN_SRC emacs-lisp
-;; https://cestlaz.github.io/posts/using-emacs-8-autocomplete/
-(use-package auto-complete
-  :ensure t
-  :init
-  (progn
-    (ac-config-default)
-    (global-auto-complete-mode t) ))
-
-(add-to-list 'ac-modes 'raku-mode)
-#+END_SRC
-** Swiper / Counsel
-   - [[https://cestlaz.github.io/posts/using-emacs-6-swiper/]]
-#+BEGIN_SRC emacs-lisp
-(use-package counsel :ensure t )
-
-(use-package swiper
-  :ensure try
-  :config
-  (progn
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-height 7)
-    (setq ivy-fixed-height-minibuffer nil)
-    (global-set-key "\C-s" 'swiper)
-    (global-set-key (kbd "C-c C-r") 'ivy-resume)
-    (global-set-key (kbd "<f6>") 'ivy-resume)
-    (global-set-key (kbd "M-x") 'counsel-M-x)
-    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-    (global-set-key (kbd "<f1> l") 'counsel-load-library)
-    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-    (global-set-key (kbd "C-c g") 'counsel-git)
-    (global-set-key (kbd "C-c j") 'counsel-git-grep)
-    (global-set-key (kbd "C-c k") 'counsel-ag)
-    (global-set-key (kbd "C-x l") 'counsel-locate)
-    (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-    ))
-#+END_SRC
 * Dired / Listing / Bookmarks
 ** Open Bookmark by Default
 #+BEGIN_SRC emacs-lisp
