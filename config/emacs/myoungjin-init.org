@@ -480,7 +480,10 @@ certain major modes defined in `display-line-numbers-exempt-modes'"
   (use-package raku-mode :ensure t :defer t)
   (use-package fish-mode :ensure t :defer t)
   (use-package rust-mode :ensure t)
+  (use-package haskell-mode :ensure t)
+  (use-package go-mode :ensure t)
 #+END_SRC
+
 ** Flycheck
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
@@ -547,37 +550,37 @@ certain major modes defined in `display-line-numbers-exempt-modes'"
 #+END_SRC
 ** Shortcuts Table (mainly for file or buffer)
 #+NAME: myjin/shortcuts-list
-  | Keymap    | Key         | Binding Type | Link                                    | Extra Info | Note                                |
-  |-----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
-  | t         | m           | file         | ~/proj/.code-memo.org                   | nil        | nil for no prefix                   |
-  | t         | b           | file         | ~/gtd/inbox.org                         | nil        |                                     |
-  | t         | g           | file         | ~/gtd/gtd.org                           | nil        |                                     |
-  | t         | i           | file         | myoungjin-init.org                      | t          | t for using user-emacs-directory    |
-  | t         | s           | buff         | *scratch*                               | nil        | it looks bold when type **scratch** |
-  | t         | e           | file         | ~/gtd/english.org                       | nil        |                                     |
-  |-----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
-  | t         | p           | toggle       | paredit-mode                            |            | toggle mode                         |
-  | g         | C-c d       | func         | paredit-forward-down                    |            |                                     |
-  | g         | C-c s       | func         | paredit-splice-sexp                     |            | for terminal compatibility          |
-  | g         | C-c <left>  | func         | paredit-backward-slurp-sexp             |            | ..                                  |
-  | g         | C-c <right> | func         | paredit-backward-barf-sexp              |            | ..                                  |
-  |-----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
-  | g         | C-]         | func         | fold-dwim-toggle                        |            |                                     |
-  | g         | C-x [       | func         | fold-dwim-hide-all                      |            |                                     |
-  | g         | C-x ]       | func         | fold-dwim-show-all                      |            |                                     |
-  |-----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
-  | t         | j           | func         | tabbar-backward                         |            |                                     |
-  | t         | k           | func         | tabbar-forward                          |            |                                     |
-  | t         | h           | func         | tabbar-backward-group                   |            |                                     |
-  | t         | l           | func         | tabbar-forward-group                    |            |                                     |
-  |-----------+-------------+--------------+-----------------------------------------+------------+-------------------------------------|
-  | g         | C-c a       | func         | org-agenda                              |            |                                     |
-  | g         | C-c c       | func         | org-capture                             |            |                                     |
-  | org-mode  | M-n         | func         | org-next-link                           |            |                                     |
-  | org-mode  | M-p         | func         | org-previous-link                       |            |                                     |
-  | org-mode  | C-c m RET   | func         | myjin/org-insert-todo-heading           |            | WORKAROUND                          |
-  | org-mode  | C-c m \     | func         | org-insert-todo-heading-respect-content |            |                                     |
-  | rust-mode | C-c C-c     | func         | rust-run                                |            |                                     |
+  | Keymap    | Key         | Binding Type | Link                                    | Extra Info | Note                              |
+  |-----------+-------------+--------------+-----------------------------------------+------------+-----------------------------------|
+  | t         | m           | file         | ~/proj/.code-memo.org                   | nil        | nil for no prefix                 |
+  | t         | b           | file         | ~/gtd/inbox.org                         | nil        |                                   |
+  | t         | g           | file         | ~/gtd/gtd.org                           | nil        |                                   |
+  | t         | i           | file         | myoungjin-init.org                      | t          | t for using user-emacs-directory  |
+  | t         | s           | buff         | *scratch*                                 | nil        | it looks bold when type **scratch** |
+  | t         | e           | file         | ~/gtd/english.org                       | nil        |                                   |
+  |-----------+-------------+--------------+-----------------------------------------+------------+-----------------------------------|
+  | t         | p           | toggle       | paredit-mode                            |            | toggle mode                       |
+  | g         | C-c d       | func         | paredit-forward-down                    |            |                                   |
+  | g         | C-c s       | func         | paredit-splice-sexp                     |            | for terminal compatibility        |
+  | g         | C-c <left>  | func         | paredit-backward-slurp-sexp             |            | ..                                |
+  | g         | C-c <right> | func         | paredit-backward-barf-sexp              |            | ..                                |
+  |-----------+-------------+--------------+-----------------------------------------+------------+-----------------------------------|
+  | g         | C-]         | func         | fold-dwim-toggle                        |            |                                   |
+  | g         | C-x [       | func         | fold-dwim-hide-all                      |            |                                   |
+  | g         | C-x ]       | func         | fold-dwim-show-all                      |            |                                   |
+  |-----------+-------------+--------------+-----------------------------------------+------------+-----------------------------------|
+  | t         | j           | func         | tabbar-backward                         |            |                                   |
+  | t         | k           | func         | tabbar-forward                          |            |                                   |
+  | t         | h           | func         | tabbar-backward-group                   |            |                                   |
+  | t         | l           | func         | tabbar-forward-group                    |            |                                   |
+  |-----------+-------------+--------------+-----------------------------------------+------------+-----------------------------------|
+  | g         | C-c a       | func         | org-agenda                              |            |                                   |
+  | g         | C-c c       | func         | org-capture                             |            |                                   |
+  | org-mode  | M-n         | func         | org-next-link                           |            |                                   |
+  | org-mode  | M-p         | func         | org-previous-link                       |            |                                   |
+  | org-mode  | C-c m RET   | func         | myjin/org-insert-todo-heading           |            | WORKAROUND                        |
+  | org-mode  | C-c m \     | func         | org-insert-todo-heading-respect-content |            |                                   |
+  | rust-mode | C-c C-c     | func         | rust-run                                |            |                                   |
 
 
 #+BEGIN_SRC emacs-lisp :var shortcuts-data=myjin/shortcuts-list
@@ -744,69 +747,117 @@ certain major modes defined in `display-line-numbers-exempt-modes'"
 ** Prettify-Symbols-mode
 #+BEGIN_SRC emacs-lisp
   (if (display-graphic-p)
-      (add-hook
-       'raku-mode-hook
-       (lambda()
-         (mapc (lambda (pair) (push pair prettify-symbols-alist))
-               '(("->"       . 8594)      ; →
-                 ("=>"       . 8658)      ; ⇒
-                 ("~~"       . #x2248)    ; ≈
-                 ("eq"       . #xff1d)    ; ＝
-                 ("le"       . #x2266)    ; ≦
-                 ("ge"       . #x2267)    ; ≧
-                 ("gt"       . #xff1e)    ; ＞
-                 ("lt"       . #xff1c)    ; ＜
-                 ("==="      . #x2a76)    ; ⩶
+      (progn
+        (add-hook
+         'raku-mode-hook
+         (lambda()
+           (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                 '(("->"       . 8594)      ; →
+                   ("=>"       . 8658)      ; ⇒
+                   ("~~"       . #x2248)    ; ≈
+                   ("eq"       . #xff1d)    ; ＝
+                   ("le"       . #x2266)    ; ≦
+                   ("ge"       . #x2267)    ; ≧
+                   ("gt"       . #xff1e)    ; ＞
+                   ("lt"       . #xff1c)    ; ＜
+                   ;;("==="      . #x2a76)    ; ⩶
 
-                 ("return"   . #x2b6e)   ; ⭮
-                 ("-->"      . #x27fc)   ; ⟼
-                 ("returns"  . #x27fc)   ; ⟼
+                   ("return"   . #x2b6e)   ; ⭮
+                   ;;("-->"      . #x27fc)   ; ⟼
+                   ("returns"  . #x27fc)   ; ⟼
 
-                 ("say"      . #x1f3a4)   ; 🎤
-                 ("print"    . #x2399)    ; ⎙
+                   ("say"      . #x1f3a4)   ; 🎤
+                   ("print"    . #x2399)    ; ⎙
 
-                 ("use"      . #x271b)    ; ✛
-                 ("sub"      . #x2658)    ; ♘;;  ("sub" . #x1d4e2) ; 𝓢
-                 ("my"       . #x1d707 )  ; 𝜇
-                 ("our"      . #x2127 )   ; ℧
-                 ("with"     . #x293a)    ; ⤺
+                   ("use"      . #x271b)    ; ✛
+                   ("sub"      . #x2658)    ; ♘;;  ("sub" . #x1d4e2) ; 𝓢
+                   ("my"       . #x1d707 )  ; 𝜇
+                   ("our"      . #x2127 )   ; ℧
+                   ("with"     . #x293a)    ; ⤺
 
-                 ("Any"      . #x1f914)   ; 🤔
-                 ("List"     . #x24c1)    ; Ⓛ
-                 ("Array"    . #x24b6)    ; Ⓐ
-                 ("Str"      . #x24c8)    ; Ⓢ
-                 ("Bool"     . #x24b7)    ; Ⓑ
+                   ("Any"      . #x1f914)   ; 🤔
+                   ("Int"      . #x24be)    ; Ⓘ
+                   ("List"     . #x24c1)    ; Ⓛ
+                   ("Array"    . #x24b6)    ; Ⓐ
+                   ("Str"      . #x24c8)    ; Ⓢ
+                   ("Bool"     . #x24b7)    ; Ⓑ
 
-                 ("class"    . #x2656)    ; ♖
-                 ("self"     . #x1f60a)   ; 😊
-                 ("method"   . #x2657)    ; ♗
+                   ("class"    . #x2656)    ; ♖
+                   ("self"     . #x1f60a)   ; 😊
+                   ("method"   . #x2657)    ; ♗
 
-                 ;;             ("for" .  #x2200) ; ∀
+                   ("for"      . #x2200)    ; ∀
+                   ("loop"     . #x267a)    ; ♺
+                   ("if"       . #x26b3)    ; ⚳
+                   ("elsif"    . #x1fbc4)   ; 🯄
+                   ("else"     . #x2325)    ; ⌥
+                   ("last"     . #x21f2)    ; ⇲
+                   ("next"     . #x21f1)    ; ⇱
+                   ("proceed"  . #x2346)    ; ⍆
+                   ("when"     . #x2646)    ; ♆
+                   ("given"    . #x2bd5)    ; ⯕
+                   ("default"  . #x1f3c1)   ; 🏁
 
-                 ("for"      . #x267a)    ; ♺
-                 ("if"       . #x26b3)    ; ⚳
-                 ("elsif"    . #x1fbc4)   ; 🯄
-                 ("else"     . #x2325)    ; ⌥
-                 ("last"     . #x21f2)    ; ⇲
-                 ("next"     . #x21f1)    ; ⇱
-                 ("proceed"  . #x2346)    ; ⍆
-                 ("when"     . #x2646)    ; ♆
-                 ("given"    . #x2bd5)    ; ⯕
-                 ("default"  . #x1f3c1)   ; 🏁
+                   ("and"      . #x2227 )   ; ∧
+                   ("or"       . #x2228 )   ; ∨
+                   ("not"      . #x00ac )   ; ¬
 
-                 ("and"      . #x2227 )   ; ∧
-                 ("or"       . #x2228 )   ; ∨
-                 ("not"      . #xac   )   ; ¬
+                   ("Nil"      .  #x2205)   ; ∅
+                   ("True"     . #x1d54B)   ; 𝕋
+                   ("False"    . #x1d53d)   ; 𝔽
+                   ;;("contains" . #x220b)    ; ∋
 
-                 ("Nil"      .  #x2205)   ; ∅
-                 ("True"     . #x1d54B)   ; 𝕋
-                 ("False"    . #x1d53d)   ; 𝔽
-                 ("contains" . #x220b)    ; ∋
+                   ("??" . #x2047) ; ⁇
+                   ("!!" . #x203c) ; ‼
+                   ("||" . #x2016) ; ‖
+                   )))
+         (add-hook
+          'haskell-mode-hook
+          (lambda()
+            (mapc (lambda (pair) (push pair prettify-symbols-alist))
+                  '(("->"         . #x2192)    ; →
+                    ("<-"         . #x2190)    ; ←
+                    ("=>"         . 8658)      ; ⇒
+                    ("=="         . #x2261)    ; ≡
+                    ("/="         . #x2262)    ; ≢
+                    (">"          . #xff1e)    ; ＞
+                    (">="         . #x2267)    ; ≧
+                    ("<"          . #xff1c)    ; ＜
+                    ("<="         . #x2266)    ; ≦
+                    (".."         . #x2026)    ; …
 
-                 ("??" . #x2047) ; ⁇
-                 ("!!" . #x203c) ; ‼
-                 ("||" . #x2016) ; ‖
-                 )))))
+                    ("|"          . #x23aa)    ; ⎪
+                    ("&&"         . #x2227 )   ; ∧
+                    ("||"         . #x2228 )   ; ∨
+                    ("not"        . #x00ac )   ; ¬
+                    ("!!"         . #x203c )   ; ‼
+
+                    ("()"         . #x2205)    ; ∅
+                    ("True"       . #x1d54B)   ; 𝕋
+                    ("False"      . #x1d53d)   ; 𝔽
+                    ;;("IO"         . #x21f5)    ; ⇵
+
+                    ("."          . #x22c5)    ; ⋅
+                    ("*"          . #x00d7)    ; ×
+                    ("div"        . #x00f7)    ; ÷
+                    ("sqrt"       . #x221a)    ; √
+                    ("elem"       . #x2208)    ; ∈
+                    ("foldl"      . #x2945)    ; ⥅
+                    ("foldr"      . #x2946)    ; ⥆
+                    ("import"     . #x27fd)    ; ⟽
+                    ("return"     . #x27fc)    ; ⟼
+
+                    ("let"        . #x261d)    ; ☝
+
+                    ("forall"     . #x2200)    ; ∀
+                    ("if"         . #x26b3)    ; ⚳
+                    ("then"       . #x2971)    ; ⥱
+                    ("else"       . #x2325)    ; ⌥
+                    ;;("else"       . #x2608)    ; ☈
+                    ("do"         . #x2907)    ; ⤇
+                    ("where"      . #x203b)    ; ※
+                    )))))))
+
 #+END_SRC
 
 *** ✎    check this out: https://www.modernemacs.com/post/prettify-mode/

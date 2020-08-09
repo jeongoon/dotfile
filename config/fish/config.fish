@@ -14,7 +14,14 @@ abbr SS sudo systemctl
 
 #set -x EDITOR /usr/bin/vim # done by ~/.pam_environment
 
-for di in bin sbin bin/texbin perl5/bin .rakudo/install/bin .rakudo/install/share/perl6/site/bin .local/share/rakudo/bin .local/share/rakudo/share/perl6/site/bin
+set -q GOPATH; and set -x GOPATH $HOME/proj/golib
+set -x s_path_basic bin sbin bin/texbin perl5/bin
+set -x s_path_raku  .rakudo/install/bin \
+    .rakudo/install/share/perl6/site/bin .local/share/rakudo/bin \
+    .local/share/rakudo/share/perl6/site/bin
+set -x s_path_golang .local/share/go/bin $GOPATH/bin
+
+for di in $s_path_basic $s_path_raku $s_path_golang
     if test -d $HOME/$di
         string match -vq $HOME/$di "$PATH"; and set -x PATH $HOME/$di $PATH
     end
