@@ -2,6 +2,11 @@ set -g theme_nerd_fonts yes # if you set by -g once, don't need to set again.
 set -g theme_color_scheme gruvbox
 set -g fish_color_autosuggestion 999 brblack
 
+# please see ~myoungjin/bin/urxvt
+#set -g hostname xps2013 # this is read-only value
+set -U RXVT_SOCKET $HOME/.cache/urxvt/urxvtd-$hostname
+set BC_ENV_ARGS "-q"
+
 if test -f /etc/debian_version
     abbr AI sudo apt-get install
     abbr AU sudo apt-get update
@@ -15,7 +20,7 @@ abbr SS sudo systemctl
 #set -x EDITOR /usr/bin/vim # done by ~/.pam_environment
 
 set -q GOPATH; and set -x GOPATH $HOME/proj/golib
-set -x s_path_basic bin sbin bin/texbin perl5/bin
+set -x s_path_basic bin sbin bin/texbin perl5/bin .local/bin .ghcup/bin
 set -x s_path_raku  .rakudo/install/bin \
     .rakudo/install/share/perl6/site/bin .local/share/rakudo/bin \
     .local/share/rakudo/share/perl6/site/bin
@@ -26,9 +31,6 @@ for di in $s_path_basic $s_path_raku $s_path_golang
         string match -vq $HOME/$di "$PATH"; and set -x PATH $HOME/$di $PATH
     end
 end
-
-set BC_ENV_ARGS "-q"
-
 if test -d $HOME/perl5
     set -q PERL5LIB; and set -x PERL5LIB $HOME/perl5/lib/perl5:$PERL5LIB;
     set -q PERL5LIB; or set -x PERL5LIB $HOME/perl5/lib/perl5;
