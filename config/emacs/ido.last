@@ -1,0 +1,52 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/myoungjin/git/" . "jeongoon.github.io/")
+ ("/home/myoungjin/" . "git/")
+ ("/home/" . "myoungjin/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/myoungjin/git/jeongoon.github.io/"
+ "/home/myoungjin/.config/fish/functions/"
+ "/home/myoungjin/git/"
+ "/home/myoungjin/git/pantheon-runapp/"
+ "/home/myoungjin/Documents/"
+ "/home/myoungjin/install.log.org/"
+ "/home/myoungjin/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ 
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/myoungjin/git/" (25392 57074 325763 49000) "nqp/" "rakudo/" "gnome-browser-connector/" "ttf-courier-prime/" "yesod-scaffold/" "stack-templates/" "shakespeare/" "pwc-by-me/" "pro-git-reading/" "pantheon-runapp/" "pandoc/" "lib/" "keter/" "jeongoon.github.io/" "hid-power-control/" "hgrep/" "hakyll/" "go-combinations/" "fish-pandoc-any-to-markdown/" "exercism-rust/" "exercism-haskell/" "eos-loki-gentle-sound/" "elmnt-scrollpicker/" "CafeDelivery/" "CafeBlossom/" "bibim/" "combinations-bench/" "../" "./")
+
+ ("/home/myoungjin/" (25408 7220 525445 355000) "CafeBlossom.Catering.org" "CafeBlossom.Catering.org~" ".cups/" ".hplip/" ".viminfo" ".lesshst" "installlog.org" "installlog.org~" ".wine/" ".gnupg/" ".private/" "Archives/" ".pam_environment" "perl5/" ".cpan/" "runapp-errors" "study/" "bin/" "exercism/" ".Xresources.d/" ".Xresources" ".emacs.d/" "dotfiles/" "backup/" ".ssh/" "git/" ".pki/" ".ghc/" ".stack/" ".cabal/" ".ghcup/" ".var/" ".anthy/" "Install/" ".mozilla/" ".vim/" ".cache/" ".local/" ".config/" "Videos/" "Pictures/" "Music/" "Documents/" "Public/" "Templates/" "Downloads/" "Desktop/" ".bashrc" ".bash_profile" ".bash_logout" "../" "./")
+
+ ("/home/myoungjin/.config/fish/functions/" (25397 33469 427919 704000) "restartNet.fish" "restartNet.fish~" "find_media_files.fish" "shift.fish" "shift.fish~" "elem.fish" "elem.fish~" "append_to_path.fish" "append_to_path.fish~" "uniq_.fish" "make_uniq_path.fish" "find_media_file.fish" "find_media_file.fish~" "test_sub_file.fish" "exe_subs.fish" "make_season_episode_string.fish" "help_media_variable.fish" "help_media_variable.fish~" "help_media_sub_type.fish" "help_media_type.fish" "apply_tested_sub_file.fish" "apply_tested_sub_file.fish~" "find_sub_file.fish" "find_sub_file.fish~" "exe_subs.fish~" "make_season_episode_string.fish~" "vi.fish" "screen.fish" "pm.fish" "p6.fish" "mc.fish" "fisher.fish" "fish_title.fish" "fish_right_prompt.fish" "fish_prompt.fish" "fish_mode_prompt.fish" "fish_greeting.fish" "em.fish" "bobthefish_display_colors.fish" "__bobthefish_glyphs.fish" "__bobthefish_display_colors.fish" "__bobthefish_colors.fish" "../" "./")
+
+ ("/home/myoungjin/git/jeongoon.github.io/drafts/" (25383 45554 510724 786000) "#2022-08-22-symetric-programming.org#" "2022-08-22-symetric-programming.org" "2022-07-01-exercism-org-allergies.org" "2022-05-27-exercism-org-temperature.org" "2022-03-27-css-parallax-yesod-widget.lhs" "../" "./")
+
+ ("/home/myoungjin/git/pantheon-runapp/" (25383 45554 590730 435000) "README.md" "test/" "lib/" ".precomp/" "lib6/" "bin/" "man/" ".git/" ".gitignore" "../" "./")
+
+ ("/home/myoungjin/backup/" (25383 45575 822273 667000) ".viminfo" ".lesshst" "test.hs" "ArrowFun.lhs" ".rustup/" "for_devto.txt" "test.md" "FoldTree.lhs" "exercism/" "shell/" "README.md" ".python_history" "test.awk" "test-pandoc.org" "test.org~" "test.go" "test.go~" "orgmode-testing.org~" "test.html" "test.html~" "reciepe.txt~" "test.pdf" "perl5/" "perl5-backup/" "procal.account.20009168.txt" ".var/" "simple-flower.svg" "go/" ".yarnrc" ".hex/" ".mix/" "playground/" ".sbclrc" "quicklisp/" "common-lisp/" ".urxvt/" ".cpan/" ".cpan_old/" "perl-5.30.absolute.txt" ".ghcup/" ".cabal/" ".elm/" ".raku/" ".Xmodmap~" "gtd/" ".emacs.d/" ".emacs.d.spacemacs/" ".spacemacs" ".pam_environment" "dotfiles/" ".cargo/" ".w3m/" ".vscode-oss/" ".gitconfig" "public_html/" ".xsession-errors" ".xsession-errors.old" ".dmrc" ".wine/" ".rakudo/" ".rakudo-star-2019.03/" ".zef/" ".gnome/" ".Xresources" ".Xresources~" ".wine32/" "other.github/" ".kde/" ".links/" ".gvfs/" ".xscreensaver" ".thumbnails/" ".gnupg/" ".bashrc" "Downloads/" ".kingsoft/" "PAYG.2018-2019/" ".nano/" ".xinputrc" ".themes/" ".macromedia/" ".local/" ".cddb/" ".nv/" "lib/" ".precomp/" ".nvidia-settings-rc" ".config/" ".sane/" "FirstHomeLoan/" "Recordings/" ".masterpdfeditor/" ".dbus/" ".dvdcss/" "Print/" ".vim/" ".bash_history" ".profile" ".node_repl_history" ".anthy/" ".xbindkeysrc" ".bash_logout" ".sudo_as_admin_successful" "Pictures/" ".adobe/" "Documents/" ".selected_editor" ".uim.d/" ".rakudo-star-2018.06/" ".ridi" ".gnutls/" ".sunpinyin/" ".Xauthority" ".xdvirc" "bin/" ".psql_history" ".wget-hsts" ".gphoto/" ".oracle_jre_usage/" ".Xresources.d/" ".hplip/" ".mozilla/" ".mplayer/" ".gconf/" "PDF/" ".audacity-data/" ".recently-used" ".lyrics/" ".npm/" ".ICEauthority" ".update-timestamp" ".vimrc" ".pki/" ".ssh/" "proj/" ".private/" "../" "./")
+
+ ("/home/myoungjin/git/jeongoon.github.io/posts/" (25383 45554 504057 648000) "2022-08-22-exercism-org-rust-parallel-letter-frequency.org" "2022-07-01-exercism-org-pangram.org" "2022-06-27-exercism-org-magazine-cut.org" "2022-06-05-foldt.lhs" "2022-05-20-exercism-org-raindrops.org" "2022-05-17-exercism-rust-clock.org" "2022-04-25-exercism-org-LeapYear.lhs" "2022-04-23-grep-with-header.org" "2022-04-21-make-a-fish-function.org" "2022-04-18-org-to-markdown.org" "2022-04-16-about-fish-shell.org" "2022-04-15-Combinations-TailAfterTail'.lhs" "2022-04-13-How-to-write-benchmark-in-golang.org" "2022-04-11-How-to-write-benchmark-with-criterion.lhs" "2022-04-10-How-to-write-benchmark-with-stack.org" "2022-04-03-Combinations-TailAfterTail.lhs" "2022-03-29-Combination.lhs" "2022-03-18-css-parallax-revised-1.markdown" "2022-03-27-org-mode-test.org" "2022-03-12-css-parallax-revised-0.markdown" "2022-03-10-using-hakyll.markdown" "../" "./")
+
+ ("/home/myoungjin/git/jeongoon.github.io/" (25383 45554 510724 786000) "_cache/" "study/" "test.md" "myblog.cabal" "myblog.cabal~" "drafts/" "Changelog.md" "stack.yaml" "stack.yaml~" "site.hs" "site.hs~" ".gitignore" ".#test" "about.rst" "index.html" "docs/" "images/" "README.md" "contact.markdown" "stack.yaml.lock" ".stack-work/" "templates/" "posts/" "LICENSE" "css/" ".git/" "../" "./")
+
+ ("/home/myoungjin/Documents/" (25380 65452 49162 894000) "../" "./")
+
+ ("/home/myoungjin/Desktop/" (25380 65452 49162 894000) "../" "./")
+
+ ("/home/" (25380 58004 375387 615000) "myoungjin/" "../" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

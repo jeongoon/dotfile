@@ -31,13 +31,20 @@ for di in $s_path_basic $s_path_raku $s_path_golang
         string match -vq $HOME/$di "$PATH"; and set -x PATH $HOME/$di $PATH
     end
 end
+
 if test -d $HOME/perl5
     set -q PERL5LIB; and set -x PERL5LIB $HOME/perl5/lib/perl5:$PERL5LIB;
     set -q PERL5LIB; or set -x PERL5LIB $HOME/perl5/lib/perl5;
     set -q PERL_LOCAL_LIB_ROOT; and set -x PERL_LOCAL_LIB_ROOT $HOME/perl5:$PERL_LOCAL_LIB_ROOT;
     set -q PERL_LOCAL_LIB_ROOT; or set -x PERL_LOCAL_LIB_ROOT $HOME/perl5;
-    set -x PERL_MB_OPT --install_base\ \"$HOME/perl5\";
-    set -x PERL_MM_OPT INSTALL_BASE=$HOME/perl5;
+    set -q PERL_INSTALL_ROOT; or set -x PERL_INSTALL_ROOT $HOME/perl5
+    set -x PERL_MB_OPT --install_base\ .;
+    set -x PERL_MM_OPT INSTALL_BASE=.;
+end
+
+set -q s_manpath_perl; set -x s_manpath_perl $HOME/perl5/man
+if test -d $s_manpath_perl
+    set -x MANPATH $MANPATH $s_manpath_perl
 end
 
 # PERL6LIB use comma(,) as a seporator

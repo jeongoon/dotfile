@@ -1,0 +1,1 @@
+/home/myoungjin/.config/fish/functions/find_media_file.fish

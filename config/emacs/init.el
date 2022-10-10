@@ -9,6 +9,7 @@
 
 (require 'package)
 (setq package-enable-at-startup nil)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 
@@ -48,7 +49,8 @@
  '(haskell-process-args-stack-ghci
    '("--ghci-options=-ferror-spans -dynamic" "--no-build" "--no-load"))
  '(iswitchb-mode 'on)
- '(org-agenda-files '("~/gtd/inbox.org" "~/gtd/gtd.org" "~/gtd/tickler.org"))
+ '(org-agenda-files
+   '("~/dotfiles/config/emacs/myoungjin-init.org" "/home/myoungjin/gtd/inbox.org" "/home/myoungjin/gtd/gtd.org" "/home/myoungjin/gtd/tickler.org"))
  '(org-refile-targets
    '(("~/gtd/gtd.org" :maxlevel . 3)
      ("~/gtd/someday.org" :level . 1)
