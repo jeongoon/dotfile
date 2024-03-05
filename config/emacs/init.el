@@ -50,11 +50,11 @@
    '("--ghci-options=-ferror-spans -dynamic" "--no-build" "--no-load"))
  '(iswitchb-mode 'on)
  '(org-agenda-files
-   '("~/dotfiles/config/emacs/myoungjin-init.org" "/home/myoungjin/gtd/inbox.org" "/home/myoungjin/gtd/gtd.org" "/home/myoungjin/gtd/tickler.org"))
+   '("~/SecondBrain/org-roam/20240122185422-조직구조.org" "/home/myoungjin/gtd/inbox.org" "/home/myoungjin/gtd/gtd.org" "/home/myoungjin/gtd/tickler.org" "/home/myoungjin/gtd/writing.org" "/home/myoungjin/.config/emacs/myoungjin-init.org"))
  '(org-refile-targets
    '(("~/gtd/gtd.org" :maxlevel . 3)
      ("~/gtd/someday.org" :level . 1)
-     ("~/gtd/tickler.org" :maxlevel . 2)) t)
+     ("~/gtd/tickler.org" :maxlevel . 2)))
  '(package-selected-packages
    '(beacon which-key avy tabbar w3m raku-mode fold-dwim-org fold-dwim gruvbox-theme auctex fish-mode counsel ivy auto-complete magit use-package nov flycheck-perl6 cl-lib-highlight cl-generic cl-format airline-themes))
  '(powerline-default-separator 'utf-8)
@@ -101,14 +101,14 @@
  ;; If there is more than one, they won't work right.
  '(airline-visual-center ((t (:background "#b88853" :foreground "#000000" :weight normal))))
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
- '(org-document-title ((t (:inherit default :weight bold :foreground "#333333" :family "Fira Sans Compressed" :height 1.5 :underline nil))))
- '(org-level-1 ((t (:inherit default :weight bold :foreground "#333333" :family "Fira Sans Compressed" :height 1.5))))
- '(org-level-2 ((t (:inherit default :weight bold :foreground "#333333" :family "Fira Sans Compressed" :height 1.5))))
- '(org-level-3 ((t (:inherit default :weight bold :foreground "#333333" :family "Fira Sans Compressed" :height 1.25))))
- '(org-level-4 ((t (:inherit default :weight bold :foreground "#333333" :family "Fira Sans Compressed" :height 1.1))))
- '(org-level-5 ((t (:inherit default :weight bold :foreground "#333333" :family "Fira Sans Compressed"))))
- '(org-level-6 ((t (:inherit default :weight bold :foreground "#333333" :family "Fira Sans Compressed"))))
- '(org-level-7 ((t (:inherit default :weight bold :foreground "#333333" :family "Fira Sans Compressed"))))
- '(org-level-8 ((t (:inherit default :weight bold :foreground "#333333" :family "Fira Sans Compressed")))))
+ '(org-document-title ((t (:inherit default :weight bold :foreground "#333333" :font "FantasqueSansMono Nerd Font Mono" :height 1.5 :underline nil))))
+ '(org-level-1 ((t (:inherit default :weight bold :foreground "#333333" :font "FantasqueSansMono Nerd Font Mono" :height 1.5))))
+ '(org-level-2 ((t (:inherit default :weight bold :foreground "#333333" :font "FantasqueSansMono Nerd Font Mono" :height 1.5))))
+ '(org-level-3 ((t (:inherit default :weight bold :foreground "#333333" :font "FantasqueSansMono Nerd Font Mono" :height 1.25))))
+ '(org-level-4 ((t (:inherit default :weight bold :foreground "#333333" :font "FantasqueSansMono Nerd Font Mono" :height 1.1))))
+ '(org-level-5 ((t (:inherit default :weight bold :foreground "#333333" :font "FantasqueSansMono Nerd Font Mono"))))
+ '(org-level-6 ((t (:inherit default :weight bold :foreground "#333333" :font "FantasqueSansMono Nerd Font Mono"))))
+ '(org-level-7 ((t (:inherit default :weight bold :foreground "#333333" :font "FantasqueSansMono Nerd Font Mono"))))
+ '(org-level-8 ((t (:inherit default :weight bold :foreground "#333333" :font "FantasqueSansMono Nerd Font Mono")))))
 
 ;;; init.el ends here

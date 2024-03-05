@@ -17,10 +17,16 @@ end
 abbr SU sudo -i
 abbr SS sudo systemctl
 
-#set -x EDITOR /usr/bin/vim # done by ~/.pam_environment
+set -x EDITOR "/usr/bin/emacsclient -t"
+set -x IM_MODULE ibus
+set -x GTK_IM_MODULE $IM_MODULE
+set -x QT_IM_MODULE $IM_MODULE
+set -x QT4_IM_MODULE $IM_MODULE
+set -x XMODIFERS "@im=$IM_MODULE"
+set -x MOZ_ENABLE_WAYLAND 1
 
 set -q GOPATH; and set -x GOPATH $HOME/proj/golib
-set -x s_path_basic bin sbin bin/texbin perl5/bin .local/bin .ghcup/bin
+set -x s_path_basic bin sbin perl5/bin .local/bin .ghcup/bin
 set -x s_path_raku  .rakudo/install/bin \
     .rakudo/install/share/perl6/site/bin .local/share/rakudo/bin \
     .local/share/rakudo/share/perl6/site/bin
@@ -28,8 +34,14 @@ set -x s_path_golang .local/share/go/bin $GOPATH/bin
 
 for di in $s_path_basic $s_path_raku $s_path_golang
     if test -d $HOME/$di
-        string match -vq $HOME/$di "$PATH"; and set -x PATH $HOME/$di $PATH
+        elem "$HOME/$di" $PATH; or set -x PATH $HOME/$di $PATH
     end
+end
+
+set -x texbin /usr/local/texlive/2023/bin/x86_64-linux
+
+if test -d $texbin
+    elem $texbin "$PATH"; or set -x PATH $texbin $PATH
 end
 
 if test -d $HOME/perl5
@@ -42,10 +54,15 @@ if test -d $HOME/perl5
     set -x PERL_MM_OPT INSTALL_BASE=.;
 end
 
-set -q s_manpath_perl; set -x s_manpath_perl $HOME/perl5/man
+set -e MANPATH
+set -x MANPATH (manpath)
+
+set -q s_manpath_perl; and set -x s_manpath_perl $HOME/perl5/man
 if test -d $s_manpath_perl
-    set -x MANPATH $MANPATH $s_manpath_perl
+    elem $s_manpath_perl "$MANPATH"
+    or set -x MANPATH $MANPATH $s_manpath_perl
 end
+
 
 # PERL6LIB use comma(,) as a seporator
 

@@ -8,6 +8,8 @@ Xft.rgba:                   rgb
 Xft.hinting:                true
 Xft.hintstyle:              hintslight
 Xft.lcdfilter:              lcddefault
+! Emacs ; added on 28th Jan 2024
+Emacs.useXIM:               false
 
 ! Rxvt Unicode
 #include ".Xresources.d/rxvt-unicode.rc"
